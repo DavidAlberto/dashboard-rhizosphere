@@ -56,7 +56,41 @@ pip install -r requirements.txt --extra-index-url https://download.pytorch.org/w
 
 # Set up R environment
 setup_env ".renv" "" r-base=4.4 r-essentials r-tidyverse quarto
-Rscript -e "install.packages(c('ggplot2', 'dplyr', 'tidyr', 'purrr', 'stringr', 'forcats'), repos='https://cran.rstudio.com/')" || handle_error "Failed to install additional R packages"
+Rscript -e "
+# CRAN Packages
+packages <- c('ggplot2', 'dplyr', 'tidyr', 'purrr', 'stringr', 'forcats',
+              'shiny', 'shinydashboard', 'flexdashboard', 'plotly', 'DT',
+              'tidyverse', 'data.table', 'caret', 'randomForest', 'xgboost', 
+              'e1071', 'mlr3', 'shinyjs')
+
+# Function to check if a package is installed and install if missing
+install_if_missing <- function(pkg) {
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    install.packages(pkg, repos = 'https://cran.rstudio.com/')
+  }
+}
+
+# Install CRAN packages
+invisible(lapply(packages, install_if_missing))
+
+# Install Bioconductor packages if needed
+if (!requireNamespace('BiocManager', quietly = TRUE)) {
+  install.packages('BiocManager', repos = 'https://cran.rstudio.com/')
+}
+BiocManager::install(c('biomaRt', 'GenomicFeatures'))
+" || handle_error "Failed to install additional R packages"
+
+# Install Quarto
+if ! command -v quarto &> /dev/null; then
+    echo "Installing Quarto..."
+    wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.3.450/quarto-1.3.450-linux-amd64.deb || handle_error "Failed to download Quarto"
+    sudo dpkg -i quarto-1.3.450-linux-amd64.deb || handle_error "Failed to install Quarto"
+    sudo apt-get install -f -y || handle_error "Failed to install Quarto dependencies"
+    rm quarto-1.3.450-linux-amd64.deb
+    quarto --version || handle_error "Failed to verify Quarto installation"
+else
+    echo "Quarto is already installed."
+fi
 
 # Verify pyproject.toml
 if [ ! -f "pyproject.toml" ]; then
