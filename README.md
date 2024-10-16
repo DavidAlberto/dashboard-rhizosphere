@@ -68,7 +68,7 @@ source $HOME/miniconda/bin/activate
 ### Python Environment Setup
 
 ```bash
-conda create -p .venv python=3.9 -y
+conda create -p .venv python=3.12 -y
 conda activate .venv
 pip install -r requirements.txt
 ```
@@ -76,15 +76,12 @@ pip install -r requirements.txt
 ### R Environment Setup
 
 ```bash
-conda create -p .renv r-base=4.2.3 -y
+conda create -p .renv r-base=4.3.1 -y
 conda activate .renv
 conda install -c conda-forge r-essentials r-tidyverse quarto -y
 Rscript -e "
 # List of packages
-packages <- c('ggplot2', 'dplyr', 'tidyr', 'purrr', 'stringr', 'forcats',
-              'shiny', 'shinydashboard', 'flexdashboard', 'plotly', 'DT',
-              'tidyverse', 'data.table', 'caret', 'randomForest', 'xgboost', 
-              'e1071', 'mlr3', 'shinyjs')
+packages <- c('shiny', 'shinydashboard', 'flexdashboard', 'plotly')
 
 # Function to check if a package is installed and install it if missing
 install_if_missing <- function(pkg) {
@@ -100,7 +97,7 @@ invisible(lapply(packages, install_if_missing))
 if (!requireNamespace('BiocManager', quietly = TRUE)) {
   install.packages('BiocManager', repos = 'https://cran.rstudio.com/')
 }
-BiocManager::install(c('biomaRt', 'GenomicFeatures'))
+BiocManager::install(c('phyloseq', 'biomformat'))
 "
 ```
 

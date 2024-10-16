@@ -51,17 +51,14 @@ setup_env() {
 }
 
 # Set up Python environment
-setup_env ".venv" "3.11"
+setup_env ".venv" "3.12"
 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu118 || handle_error "Failed to install Python dependencies including PyTorch"
 
 # Set up R environment
-setup_env ".renv" "" r-base=4.4 r-essentials r-tidyverse quarto
+setup_env ".renv" "" r-base=4.3.1 r-essentials r-tidyverse quarto
 Rscript -e "
 # CRAN Packages
-packages <- c('ggplot2', 'dplyr', 'tidyr', 'purrr', 'stringr', 'forcats',
-              'shiny', 'shinydashboard', 'flexdashboard', 'plotly', 'DT',
-              'tidyverse', 'data.table', 'caret', 'randomForest', 'xgboost', 
-              'e1071', 'mlr3', 'shinyjs')
+packages <- c('shiny', 'shinydashboard', 'flexdashboard', 'plotly')
 
 # Function to check if a package is installed and install if missing
 install_if_missing <- function(pkg) {
@@ -77,7 +74,7 @@ invisible(lapply(packages, install_if_missing))
 if (!requireNamespace('BiocManager', quietly = TRUE)) {
   install.packages('BiocManager', repos = 'https://cran.rstudio.com/')
 }
-BiocManager::install(c('biomaRt', 'GenomicFeatures'))
+BiocManager::install(c('phyloseq', 'biomformat'))
 " || handle_error "Failed to install additional R packages"
 
 # Install Quarto
@@ -105,6 +102,7 @@ version = "0.1.0"
 dependencies = [
     "numpy",
     "pandas",
+    "dash",
     "scikit-learn",
     "tensorflow",
     "keras",
