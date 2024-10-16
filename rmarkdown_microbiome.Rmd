@@ -1,0 +1,234 @@
+---
+title: "CAMDA2024 - Microbiom"
+subtitle: "002_Gut_Kraken"
+author: "David Alberto García Estrada"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Directories
+
+## Main Working Directory 
+
+We adjust the working area
+
+```{r}
+# Display current directory
+getwd()
+# If necessary, change the path where the stored files are located. 
+workingDir <- "."
+setwd(workingDir)
+```
+
+## Other directories
+
+Data and Results
+
+```{r}
+Data <- "Data/"
+dir.create(Data, showWarnings = FALSE)
+Results <- "Results/"
+dir.create(Results, showWarnings = FALSE)
+
+TypeData <- c("Gut", "Covid", "Kraken", "Braken")
+SubResults <- c("Abundance", "Diversity", 
+                "DifferentialTaxa", "DifferentialFunction", 
+                "VennDiagramTaxa", "VennDiagramFunction")
+
+for (data in TypeData){
+  # Data
+  D.dir <- paste0(Data, data, "/")
+  dir.create(D.dir, showWarnings = FALSE)
+  # Results
+  R.dir <- paste0(Results, data, "/")
+  dir.create(R.dir, showWarnings = FALSE)
+  
+  # SubResults
+  for (subres in SubResults){
+    SR.dir <- paste0(R.dir, subres, "/")
+    dir.create(SR.dir, showWarnings = FALSE)
+  }
+}
+```
+
+We adjust the working area
+
+```{r}
+# Set seed
+set.seed(1992)
+
+# Display current directory
+getwd()
+# If necessary, change the path where the stored files are located. 
+workingDir <- "."
+setwd(workingDir)
+
+# Type data
+data <- "Kraken"
+
+# Directories
+D.dir <- paste0(Data, data, "/")
+R.dir <- paste0(Results, data, "/")
+```
+
+# Data
+
+# Import and manipulation of kraken-biom file
+
+We put to the variable biom the result of kraken-biom, this results in a phyloseq object.
+
+```{r}
+biom <- import_biom(paste0(D.dir, "Kraken.biom"))
+```
+
+In the data, the name as such starts with the letter number 4, it has 3 before, for example "k__", with the following command we eliminate these 3 first letters and it starts with the 4th letter.
+
+```{r}
+biom@tax_table@.Data <- substring(biom@tax_table@.Data, 4)
+colnames(biom@tax_table@.Data) <- c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")
+head(biom@tax_table@.Data)
+tab.biom <- biom@tax_table@.Data
+write.table(tab.biom, file = paste0(D.dir, "Gut_Kraken.txt"), 
+            row.names = TRUE, col.names = NA, quote = FALSE, sep = "\t")
+```
+
+Metadata
+
+```{r}
+# Metadata
+Meta <- read.table(paste0(Data, "Gut/metadata.txt"), header = TRUE)
+rownames(Meta) <- Meta$SampleID
+Meta$Diagnosis <- as.factor(Meta$Diagnosis)
+Meta$Project <- as.factor(Meta$Project)
+rownames(biom) %in% rownames(Meta)
+all(rownames(biom) %in% Meta$SampleID)
+biom@sam_data <- sample_data(Meta)
+```
+
+# Assembly and manipulation of **Phyloseq objects**. 
+
+Read´s Plot
+
+```{r}
+deep <- data.frame(Samples = sample_names(biom),
+                   Reads = sample_sums(biom)/1000000,
+                   Diagnosis = sample_data(biom)$Diagnosis,
+                   Project = sample_data(biom)$Project)
+deep.ord <- deep[order(deep$Reads),]
+select_rows <- rbind(deep.ord[1:2, ], 
+                     deep.ord[(nrow(deep.ord)-1):nrow(deep.ord), ],
+                     deep.ord[sample(nrow(deep.ord), 16), ])
+
+plot.reads <- ggplot(select_rows, aes(x = Samples, y = Reads, fill = Samples)) +
+    theme_classic() +
+    labs(x = "Samples", y = "Million reads",
+         title = "Total readings of analyzed samples of Shotgun") +
+    geom_col(position = position_dodge(0.9), width = 0.9)
+plot.reads
+```
+
+```{r, message = FALSE, warning = FALSE}
+# How much empty data there is 
+kraken <- prune_taxa(taxa_sums(biom) > 0, biom)
+summary(kraken@tax_table@.Data== "") 
+kraken_P <- subset_taxa(kraken, Phylum != "")
+summary(kraken_P@tax_table@.Data == "") 
+kraken_G <- subset_taxa(kraken, Genus != "")
+summary(kraken_G@tax_table@.Data == "")  
+kraken_S <- subset_taxa(kraken, Species != "")
+summary(kraken_S@tax_table@.Data == "")  
+```
+
+# Results
+
+## Abundance
+
+Abundance top
+
+```{r}
+# Define the number top taxa
+ntop <- 10
+
+# Select the top taxa based on their abundance sums
+top <- sort(taxa_sums(kraken), T)[1:ntop]
+
+# Filter the phyloseq object to include only the top taxa
+top <- prune_taxa(names(top), kraken)
+
+# Convert to dataframe
+topDF <- psmelt(top)
+
+# Plot 
+topplot <- ggplot(data = topDF, aes(x = Diagnosis, y = Abundance, fill = Species)) +
+    geom_bar(stat = "identity", position = "stack") + #position = "fill") + 
+    # Scale
+    labs(title = "Absolute abundance", x = "Diagnosis", 
+         y = "Absolute abundance", fill = "Species") +
+    # Theme
+    theme_classic()
+topplot
+
+ggsave(filename = paste0(R.dir, "Abundance/", data, "-AbsAbun-Top10.svg"), 
+       plot = topplot, width = 10, height = 10, units = "in")
+```
+
+## Diversity
+
+Alpha
+
+```{r}
+# Alpha diversity measures
+measures <- c("Observed", "Chao1", "Shannon", "Simpson")
+
+# Plot
+alpha <- plot_richness(physeq = kraken, measures = measures,
+                       color = "Diagnosis", x = "Diagnosis", 
+                       title = "Alpha Diversity Indices") +
+  labs(x = "Diagnosis", y = "Alpha Diversity Measures") +
+  theme_classic() +
+  geom_boxplot(aes(fill = Diagnosis), alpha = 0.7) + 
+  scale_color_brewer(palette = "Set1") + 
+  scale_fill_brewer(palette = "Set1")
+alpha
+
+ggsave(filename = paste0(R.dir, "Diversity/", data, "-AlphaDiversity.svg"), 
+       plot = alpha, width = 15, height = 10, units = "in")
+```
+
+Beta
+
+```{r}
+Ord <- ordinate(physeq = kraken, method = "PCoA", distance = "bray")
+beta <- plot_ordination(physeq = kraken, ordination = Ord, color = "Diagnosis") +
+    theme_classic() +
+    stat_ellipse(aes(group = Diagnosis, linetype = Diagnosis), type = "t", size = 0.75) +
+    labs(title = "Beta diversity (PCoA Bray-Curtis)")
+beta
+```
+
+Escalamiento
+
+```{r}
+# Percentage
+p.kraken <- transform_sample_counts(physeq = kraken, fun = function(x) x/sum(x))
+p.Ord <- ordinate(physeq = p.kraken, method = "PCoA", distance = "bray")
+p.plot <- plot_ordination(physeq = p.kraken, ordination = p.Ord, color = "Diagnosis") +
+  stat_ellipse(aes(group = Diagnosis, linetype = Diagnosis), type = "t", size = 0.75) +
+  theme_classic()
+# Log
+l.kraken <- transform_sample_counts(physeq = kraken, fun = function(x) log(x+1))
+l.Ord <- ordinate(physeq = l.kraken, method = "PCoA", distance = "bray")
+l.plot <- plot_ordination(physeq = l.kraken, ordination = l.Ord, color = "Diagnosis") +
+  stat_ellipse(aes(group = Diagnosis, linetype = Diagnosis), type = "t", size = 0.75) +
+  theme_classic()
+# Square root
+s.kraken <- transform_sample_counts(physeq = kraken, fun = function(x) sqrt(x))
+s.Ord <- ordinate(physeq = s.kraken, method = "PCoA", distance = "bray")
+s.plot <- plot_ordination(physeq = s.kraken, ordination = s.Ord, color = "Diagnosis")+
+  stat_ellipse(aes(group = Diagnosis, linetype = Diagnosis), type = "t", size = 0.75) +
+  theme_classic()
+```
