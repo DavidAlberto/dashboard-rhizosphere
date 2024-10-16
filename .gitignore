@@ -6,4 +6,5 @@
 # R environments
 .renv/
 *.Rhistory
+*.Rproj
 *.Rproj.user/
