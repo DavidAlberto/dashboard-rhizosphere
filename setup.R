@@ -1,3 +1,6 @@
+# Set CRAN repository
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
+
 # Check R version
 R_MIN_VERSION <- "4.3.0"
 if (compareVersion(as.character(getRversion()), R_MIN_VERSION) < 0) {
