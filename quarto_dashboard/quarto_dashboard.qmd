@@ -12,7 +12,7 @@ filters:
 ---
 
 ```{r diretories, include=FALSE}
-setwd("~/Documents/Code/github.com/dashboard-rhizosphere/quarto_dashboard")
+setwd("~/quarto_dashboard")
 ```
 
 ```{r install, include=FALSE}
