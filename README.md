@@ -1,16 +1,3 @@
-# Dashboard Rhizosphere
-
-## Description
-
-## Installation
-
-### Conda
-
-Create virtual environment
-Create R environment
-
-### Packages
-
 # Dashboard Rhizosphere Project Setup Guide
 
 This README provides instructions for setting up the development environment for the Dashboard Rhizosphere Project, including Conda installation, creation of virtual environments, and installation of packages for R and Python.
@@ -79,26 +66,7 @@ pip install -r requirements.txt
 conda create -p .renv r-base=4.3.1 -y
 conda activate .renv
 conda install -c conda-forge r-essentials r-tidyverse quarto -y
-Rscript -e "
-# List of packages
-packages <- c('shiny', 'shinydashboard', 'flexdashboard', 'plotly')
-
-# Function to check if a package is installed and install it if missing
-install_if_missing <- function(pkg) {
-  if (!requireNamespace(pkg, quietly = TRUE)) {
-    install.packages(pkg, repos = 'https://cran.rstudio.com/')
-  }
-}
-
-# Install CRAN packages
-invisible(lapply(packages, install_if_missing))
-
-# Install Bioconductor packages if needed
-if (!requireNamespace('BiocManager', quietly = TRUE)) {
-  install.packages('BiocManager', repos = 'https://cran.rstudio.com/')
-}
-BiocManager::install(c('phyloseq', 'biomformat'))
-"
+Rscript setup.R
 ```
 
 ### Quarto Installation
@@ -106,17 +74,9 @@ BiocManager::install(c('phyloseq', 'biomformat'))
 For Debian/Ubuntu systems, you can install Quarto using the binary package:
 
 ```bash
-# Download the latest .deb package
 wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.3.450/quarto-1.3.450-linux-amd64.deb
-
-# Install the package
 sudo dpkg -i quarto-1.3.450-linux-amd64.deb
-
-# Install any missing dependencies
 sudo apt-get install -f
-
-# Verify the installation
-quarto --version
 ```
 
 For other systems or for the latest version, please refer to the [official Quarto documentation](https://quarto.org/docs/get-started/).

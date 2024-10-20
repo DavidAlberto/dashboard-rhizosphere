@@ -56,26 +56,7 @@ pip install -r requirements.txt --extra-index-url https://download.pytorch.org/w
 
 # Set up R environment
 setup_env ".renv" "" r-base=4.3.1 r-essentials r-tidyverse quarto
-Rscript -e "
-# CRAN Packages
-packages <- c('shiny', 'shinydashboard', 'flexdashboard', 'plotly')
-
-# Function to check if a package is installed and install if missing
-install_if_missing <- function(pkg) {
-  if (!requireNamespace(pkg, quietly = TRUE)) {
-    install.packages(pkg, repos = 'https://cran.rstudio.com/')
-  }
-}
-
-# Install CRAN packages
-invisible(lapply(packages, install_if_missing))
-
-# Install Bioconductor packages if needed
-if (!requireNamespace('BiocManager', quietly = TRUE)) {
-  install.packages('BiocManager', repos = 'https://cran.rstudio.com/')
-}
-BiocManager::install(c('phyloseq', 'biomformat'))
-" || handle_error "Failed to install additional R packages"
+Rscript setup.R || handle_error "Failed to install R packages"
 
 # Install Quarto
 if ! command -v quarto &> /dev/null; then
