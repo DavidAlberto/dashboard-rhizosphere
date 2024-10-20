@@ -31,22 +31,12 @@ install_missing_packages = function(pkg, version = NULL, verbose = TRUE) {
 ################################################################################
 # Define list of package names and required versions.
 ################################################################################
-deppkgs = c(phyloseq = "1.48.0",
-            biomformat = "1.32.0",
-            shiny = "1.9.1",
-            shinythemes = "1.2.0",
-            DT = "0.33",
-            ggplot2 = "3.5.1",
-            data.table = "1.16.0",
-            networkD3 = "0.4",
-            genefilter = "1.86.0",
-            grid = "4.4.1",
-            gridExtra = "2.3",
-            markdown = "1.13",
-            rmarkdown = "2.28",
-            png = "0.1-8",
-            RColorBrewer = "1.1-3",
-            scales = "1.3.0")
+deppkgs = c(
+  phyloseq = "1.48.0", biomformat = "1.32.0", shiny = "1.9.1",
+  shinythemes = "1.2.0", ggplot2 = "3.5.1", data.table = "1.16.2",
+  networkD3 = "0.4", genefilter = "1.86.0", grid = "4.4.1",
+  gridExtra = "2.3", markdown = "1.13", rmarkdown = "2.28",
+  png = "0.1.8", RColorBrewer = "1.1.3", scales = "1.3.0", DT = "0.33")
 
 # Loop on package check, install, update
 pkg1 = mapply(install_missing_packages,
