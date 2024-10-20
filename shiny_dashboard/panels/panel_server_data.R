@@ -90,7 +90,7 @@ output$uix_available_components_orig <- renderUI({
 })
 
 ## Render the user-selected data component using DataTables
-output$ps0ComponentTable <- renderDataTable({
+output$ps0ComponentTable <- DT::renderDT({
   if(is.null(av(input$available_components_orig))){
     return(NULL)
   }

@@ -267,7 +267,7 @@ output$uix_available_components_filt <- renderUI({
               choices = component_options(physeq()))
 })
 # Render the user-selected data component using DataTables
-output$physeqComponentTable <- renderDataTable({
+output$physeqComponentTable <- DT::renderDT({
   if(is.null(av(input$available_components_filt))){
     return(NULL)
   }
