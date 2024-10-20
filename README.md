@@ -63,7 +63,7 @@ pip install -r requirements.txt
 ### R Environment Setup
 
 ```bash
-conda create -p .renv r-base=4.3.1 -y
+conda create -p .renv r-base=4.3.3 -y
 conda activate .renv
 conda install -c conda-forge r-essentials r-tidyverse quarto -y
 Rscript setup.R
