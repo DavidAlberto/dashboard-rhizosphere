@@ -55,7 +55,7 @@ setup_env ".venv" "3.12"
 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu118 || handle_error "Failed to install Python dependencies including PyTorch"
 
 # Set up R environment
-setup_env ".renv" "" r-base=4.3.1 r-essentials r-tidyverse quarto
+setup_env ".renv" "" r-base=4.3.3 r-essentials r-tidyverse quarto
 Rscript setup.R || handle_error "Failed to install R packages"
 
 # Install Quarto
