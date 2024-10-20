@@ -21,7 +21,7 @@ output$paletteExample <- renderPlot({
   dpal <- dpal + shiny_phyloseq_ggtheme_list[[input$theme_pal]] 
   print(dpal)
 })
-output$paletteTable <- renderDataTable({
+output$paletteTable <- DT::renderDT({
   SupportedPalTab <- RColorBrewer::brewer.pal.info
   SupportedPalTab <- data.frame(Palette=rownames(SupportedPalTab), SupportedPalTab)
   colnames(SupportedPalTab)[2:3] <- c("Max_Colors", "Category")
