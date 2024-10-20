@@ -1,49 +1,33 @@
-################################################################################
-# Check that the currently-installed version of R
-# is at least the minimum required version.
-################################################################################
-R_min_version = "3.6.0"
-R_version = paste0(R.Version()$major, ".", R.Version()$minor)
-if(compareVersion(R_version, R_min_version) < 0){
-  stop("You do not have the latest required version of R installed.\n", 
-       "Launch should fail.\n",
-       "Go to http://cran.r-project.org/ and update your version of R.")
+# Check if BiocManager is installed and install it if it's missing
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
 }
-# install or update BiocManager. Updates sometimes needed as they change in-step with BioC vers
-install.packages("BiocManager")
+
 ################################################################################
 # Install basic required packages if not available/installed.
 ################################################################################
-install_missing_packages = function(pkg, version = NULL, verbose = TRUE){
-  availpacks = .packages(all.available = TRUE)
-  require("BiocManager")
-  missingPackage = FALSE
-  if(!any(pkg %in% availpacks)){
-    if(verbose){
-      message("The following package is missing.\n",
-              pkg, "\n",
-              "Installation will be attempted...")
-    }
-    missingPackage <- TRUE
-  }
-  if(!is.null(version) & !missingPackage){
-    # version provided and package not missing, so compare.
-    if( compareVersion(a = as.character(packageVersion(pkg)),
-                       b = version) < 0 ){
-      if(verbose){
-        message("Current version of package\n", 
-                pkg, "\t", 
-                packageVersion(pkg), "\n",
-                "is less than required.
-                Update will be attempted.")
+install_missing_packages = function(pkg, version = NULL, verbose = TRUE) {
+  # Check if package is already installed
+  if (requireNamespace(pkg, quietly = TRUE)) {
+    current_version <- packageVersion(pkg)
+    if (!is.null(version) && compareVersion(as.character(current_version), version) < 0) {
+      if (verbose) {
+        message("Current version of package ", pkg, " (", current_version, ") is less than required (", version, "). Update will be attempted.")
       }
-      missingPackage <- TRUE
+      BiocManager::install(pkg, update = FALSE)
+    } else {
+      if (verbose) {
+        message("Package ", pkg, " is already installed with version ", current_version)
+      }
     }
-  }
-  if(missingPackage){
-    BiocManager::install(pkg, update=FALSE)
+  } else {
+    if (verbose) {
+      message("The following package is missing: ", pkg, ". Installation will be attempted...")
+    }
+    BiocManager::install(pkg, update = FALSE)
   }
 }
+
 ################################################################################
 # Define list of package names and required versions.
 ################################################################################
@@ -62,6 +46,7 @@ deppkgs = c(phyloseq = "1.48.0",
             png = "0.1-8", 
             RColorBrewer = "1.1-3",
             scales = "1.3.0")
+
 # Loop on package check, install, update
 pkg1 = mapply(install_missing_packages,
               pkg = names(deppkgs), 
@@ -69,11 +54,12 @@ pkg1 = mapply(install_missing_packages,
               MoreArgs = list(verbose = TRUE), 
               SIMPLIFY = FALSE,
               USE.NAMES = TRUE)
+
 ################################################################################
 # Load packages that must be fully-loaded 
 ################################################################################
-for(i in names(deppkgs)){
+for (i in names(deppkgs)) {
   library(i, character.only = TRUE)
-  message(i, " package version:\n", packageVersion(i))
+  message(i, " package version: ", packageVersion(i))
 }
 ################################################################################
