@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#shiny-phyloseq-overview" id="toc-shiny-phyloseq-overview" class="nav-link active" data-scroll-target="#shiny-phyloseq-overview"><span class="header-section-number">1</span> Shiny-phyloseq Overview</a>
+  <ul class="collapse">
+  <li><a href="#typical-workflow" id="toc-typical-workflow" class="nav-link" data-scroll-target="#typical-workflow"><span class="header-section-number">1.0.1</span> Typical Workflow</a></li>
+  <li><a href="#machine-requirements" id="toc-machine-requirements" class="nav-link" data-scroll-target="#machine-requirements"><span class="header-section-number">1.0.2</span> Machine Requirements</a></li>
+  <li><a href="#tips-for-using-shiny-phyloseq" id="toc-tips-for-using-shiny-phyloseq" class="nav-link" data-scroll-target="#tips-for-using-shiny-phyloseq"><span class="header-section-number">1.0.3</span> Tips for Using Shiny-phyloseq</a></li>
+  <li><a href="#customizing-shiny-phyloseq" id="toc-customizing-shiny-phyloseq" class="nav-link" data-scroll-target="#customizing-shiny-phyloseq"><span class="header-section-number">1.0.4</span> Customizing Shiny-phyloseq</a></li>
+  <li><a href="#posting-issues" id="toc-posting-issues" class="nav-link" data-scroll-target="#posting-issues"><span class="header-section-number">1.0.5</span> Posting Issues</a></li>
+  <li><a href="#contributing-code" id="toc-contributing-code" class="nav-link" data-scroll-target="#contributing-code"><span class="header-section-number">1.0.6</span> Contributing Code</a></li>
+  <li><a href="#data-privacy" id="toc-data-privacy" class="nav-link" data-scroll-target="#data-privacy"><span class="header-section-number">1.0.7</span> Data Privacy</a></li>
+  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements"><span class="header-section-number">1.0.8</span> Acknowledgements</a></li>
+  </ul></li>
+  <li><a href="#data-input-panel-details" id="toc-data-input-panel-details" class="nav-link" data-scroll-target="#data-input-panel-details"><span class="header-section-number">2</span> Data Input Panel Details</a>
+  <ul class="collapse">
+  <li><a href="#select-dataset" id="toc-select-dataset" class="nav-link" data-scroll-target="#select-dataset"><span class="header-section-number">2.0.1</span> Select Dataset</a></li>
+  <li><a href="#upload-biom-format-file" id="toc-upload-biom-format-file" class="nav-link" data-scroll-target="#upload-biom-format-file"><span class="header-section-number">2.0.2</span> Upload Biom-Format File</a></li>
+  <li><a href="#upload-.rdata-file" id="toc-upload-.rdata-file" class="nav-link" data-scroll-target="#upload-.rdata-file"><span class="header-section-number">2.0.3</span> Upload “.RData” File</a></li>
+  <li><a href="#upload-tree-file" id="toc-upload-tree-file" class="nav-link" data-scroll-target="#upload-tree-file"><span class="header-section-number">2.0.4</span> Upload Tree File</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+
+<section id="shiny-phyloseq-overview" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Shiny-phyloseq Overview</h1>
+<p><a href="http://joey711.github.io/shiny-phyloseq">Shiny-phyloseq</a> is a <a href="shiny.rstudio.com">Shiny</a>-based graphical user interface (GUI) to <a href="http://joey711.github.io/phyloseq">the phyloseq package</a> for <a href="http://cran.r-project.org/">R</a>, hosted by <a href="http://bioconductor.org/">Bioconductor</a>.</p>
+<p>Shiny-phyloseq is intended for the following purposes (among)</p>
+<ul>
+<li><ol type="1">
+<li>Rapid, reproducible, interactive exploration of microbiome data</li>
+</ol></li>
+<li><ol start="2" type="1">
+<li>Introduction to some of the functionality in the phyloseq package</li>
+</ol></li>
+<li><ol start="3" type="1">
+<li>An accessible tool for education of both microbiome data and its analysis</li>
+</ol></li>
+<li><ol start="4" type="1">
+<li>Easy exchange and demonstration of microbiome data analyses in R</li>
+</ol></li>
+</ul>
+<p>Shiny-phyloseq is an open-source project with a modular design based on the much more general Shiny project for exposing R tools with custom web interfaces. As a result it is easy to customize — for instance by the adding new dataset(s) to the default selection list, adjusting default parameters to reflect experiment-specific choices, or even by adding/subtracting panels with new or modified functionality.</p>
+<p><a href="http://rstudio.github.io/shiny/">Shiny</a> is a fully-compliant <a href="http://cran.r-project.org/web/packages/shiny/index.html">CRAN-hosted</a> R package that provides an Application Program Interface (API) for building interactive web applications that are based on Twitter’s <a href="http://getbootstrap.com/2.3.2">Bootstrap</a> front-end toolkit. Shiny-phyloseq is almost entirely R code, but, like any Shiny app, can be further customized/extended using HTML, CSS, and JavaScript. Shiny-phyloseq is fully cross-platform and will launch locally from any R environment (Console R, Rgui, RStudio, etc.), but can also be <a href="http://shiny.rstudio.com">“hosted” by a web-server</a> — this latter-case requiring only a web browser. Shiny-phyloseq leverages Shiny’s reactive programming framework to compartmentalize and cache expensive computational steps so that they are not re-computed unnecessarily during an interactive session.</p>
+<section id="typical-workflow" class="level3" data-number="1.0.1">
+<h3 data-number="1.0.1" class="anchored" data-anchor-id="typical-workflow"><span class="header-section-number">1.0.1</span> Typical Workflow</h3>
+<p>A typical workflow in Shiny-phyloseq begins with data upload and selection, followed by optional filtering of OTUs or samples. A number of exploratory data analysis methods are available in separate panels, including alpha diversity estimates, multivariate ordination methods, and network and heatmap plots. Some of these methods depend on provided data transformations (e.g.&nbsp;regularized-log) or ecological distances (e.g.&nbsp;weighted-UniFrac, Bray-Curtis), which can be selected from a sidebar panel of parameter-input widgets placed next to each graphic on each panel. Graphics can be downloaded in user-specified format by clicking the download button at the bottom of each sidebar panel. Lastly, a user can download a compressed file containing the complete code and data necessary to completely reproduce the steps that led to their graphical result.</p>
+<p>The Shiny-phyloseq interface is organized into panels from left to right, beginning with data selection (the first to appear), filtering/curation, graphic-specific panels, and ending with provenance-tracking. User input widgets are consolidated in a lefthand sidebar of each panel. The <code>Select Dataset</code> panel (the current panel) begins each session. Pre-loaded datasets are available by default, and users can optionally specify public datasets hosted on <a href="http://www.microbio.me/qiime/">QIIME-DB</a>, or upload private dataset files that are in the <a href="biom-format.org">biom file format</a>, or even batch upload of binary <code>.RData</code> that has been previously imported into phyloseq’s data class in R. See below for further details about data input and selection.</p>
+<p>The Filter panel supports some common aspects of user-defined data filtering. Shiny-phyloseq provides a separate panel for each each major graphic function in phyloseq, including alpha-diversity (<code>Richness</code>), sample- or OTU-networks (<code>Network</code> and <code>d3Network</code>), bar plot (<code>Bar</code>), heat map (<code>Heatmap</code>), phylogenetic tree (<code>Tree</code>), ordination (<code>Ordination</code>), and scatter plot (<code>Scatter</code>). All panels support custom figure dimensions, usually at the bottom of the sidebar panel. The ggplot2-based graphics further support custom color palettes and file format for download.</p>
+<p>Among many new features not previously available in phyloseq, Shiny-phyloseq also records and makes available your sequence of input choices and subsequent graphical results during your session, allowing you to archive, share, and reproduce the sequence of steps you used to arrive at your result – without writing any new code. This can be achived at any waypoint or end of your analysis in other panels by clicking on the <code>Provenance</code> panel, then clicking the <code>Render Code</code> button (which initiates the archiving routine and data packaging). Then click the download button, and a compressed file will be downloaded that contains the data and code.</p>
+</section>
+<section id="machine-requirements" class="level3" data-number="1.0.2">
+<h3 data-number="1.0.2" class="anchored" data-anchor-id="machine-requirements"><span class="header-section-number">1.0.2</span> Machine Requirements</h3>
+<p>If you are merely pointing your web browser at a remote server that is hosting Shiny-phyloseq, then your machine performance requirements are much less. Most modern desktops/laptops will do fine. If you are launching your own locally-hosted session, then you will need to install some things and your system requirements are greater because your own computer will be performing the “back end” computations as well as rendering the graphics and user interface. See <a href="http://joey711.github.io/shiny-phyloseq/Install.html">the Shiny-phyloseq installation page</a> for more details about requirements, and detailed instructions for installing and launching Shiny-phyloseq locally.</p>
+</section>
+<section id="tips-for-using-shiny-phyloseq" class="level3" data-number="1.0.3">
+<h3 data-number="1.0.3" class="anchored" data-anchor-id="tips-for-using-shiny-phyloseq"><span class="header-section-number">1.0.3</span> Tips for Using Shiny-phyloseq</h3>
+<ul>
+<li><strong>Filtering</strong>. Most downstream analysis panels use the data that results from the latest filtering button-click as input data. If the filtering step is skipped, the original dataset is used. For most microbiome datasets filtering is a good idea.</li>
+<li><strong>Colors</strong> and <strong>Formats</strong>. Most panels provide optional color palette selections defined by <a href="http://colorbrewer.org">Color Brewer</a>, and all panels provide manual adjustment of the graphic’s width and height, which controls both the dimensions of the in-browser graphic as well as downloadable graphic via a <code>Download</code> button. For most panels (except D3 graphics) you can choose from a large number of standard vector and raster graphics formats.</li>
+<li><strong>Errors</strong>. All panels produce some sort of plot. Most errors are “caught” silently without crashing the server-side R session, but instead result in a generic graphic. You should immediately consider why your data and parameter choices might have caused a logical error. In some cases the generic graphic will include an informative label that might help you find a solution, but not always. When in doubt, turn parameters back to their default “vanilla” values, and start again.</li>
+<li><strong>Large Data and Slow Computations</strong>. If you are analyzing a very large dataset with so many microbiome samples and/or OTUs that basic calculations run slowly in “command-line” phyloseq, then there is no reason to expect that a GUI interactive approach will perform any better… unless you have hosted Shiny-phyloseq on a much-improved server from your original sluggish experience. Your happiness of the speed and responsiveness of Shiny-phyloseq depends a lot upon what machine is running the “back end”, and how large your dataset is. Common datasets with 1000 or fewer OTUs after filtering, and a 100 or fewer samples, should perform well when hosted on zippy computers with sufficient (&gt;4GB) RAM. There are no clear boundaries as it depends mostly on dataset size. Computers with &lt;=2GB RAM are probably too old to expect satisfying responsiveness in this application.</li>
+</ul>
+</section>
+<section id="customizing-shiny-phyloseq" class="level3" data-number="1.0.4">
+<h3 data-number="1.0.4" class="anchored" data-anchor-id="customizing-shiny-phyloseq"><span class="header-section-number">1.0.4</span> Customizing Shiny-phyloseq</h3>
+<p>If you’ve downloaded the Shiny-phyloseq code and intend to tinker with it, a good place to start might be to modify <code>core/default-parameters.R</code> and change certain default settings. The default filtering parameters are especially ripe for tuning to a specific dataset that you intend to present.</p>
+<p>It is also possible to modify any aspect of Shiny-phyloseq, as the complete source code is available not only for Shiny-phyloseq, but also <a href="https://github.com/rstudio/shiny">the Shiny package</a> itself. For example, you can borrow one or more panel modules of the Shiny-phyloseq codebase and embed them as a Shiny widget within an HTML slideshow generated from the <a href="http://rmarkdown.rstudio.com/authoring_shiny.html">R markdown</a>.</p>
+</section>
+<section id="posting-issues" class="level3" data-number="1.0.5">
+<h3 data-number="1.0.5" class="anchored" data-anchor-id="posting-issues"><span class="header-section-number">1.0.5</span> Posting Issues</h3>
+<p>Shiny-phyloseq is openly <a href="https://github.com/joey711/shiny-phyloseq/">developed on GitHub</a>. This openness includes a so-called “<a href="http://en.wikipedia.org/wiki/Issue_tracking_system">Issues Tracker</a>” where bug reports, feature requests, documentation revisions, and suggestions for improvement can be posted by anyone with a GitHub account, and visible/Google-searchable by all.</p>
+<p>The <a href="https://github.com/joey711/shiny-phyloseq/issues">Shiny-phyloseq issue tracker</a> can be found at this link:</p>
+<p>https://github.com/joey711/shiny-phyloseq/issues</p>
+</section>
+<section id="contributing-code" class="level3" data-number="1.0.6">
+<h3 data-number="1.0.6" class="anchored" data-anchor-id="contributing-code"><span class="header-section-number">1.0.6</span> Contributing Code</h3>
+<p>If you’re a programmer with skil in R, JavaScript, or CSS, you may be able to contribute to Shiny-phyloseq. Contributions are preferred through the standard git/GitHub <a href="https://help.github.com/articles/using-pull-requests">Pull Request</a> system. Outstanding pull requests appear here:</p>
+<p>https://github.com/joey711/shiny-phyloseq/pulls</p>
+<p>but in most cases you will “Fork and Pull” through your own account and locally originated changes.</p>
+</section>
+<section id="data-privacy" class="level3" data-number="1.0.7">
+<h3 data-number="1.0.7" class="anchored" data-anchor-id="data-privacy"><span class="header-section-number">1.0.7</span> Data Privacy</h3>
+<p>For those worried about maintaining data privacy, it is important to note that for locally-launched/served sessions the file is not actually being transmitted anywhere outside your local machine. The terms “Upload” and “Download” are referring to the data transmission between your browser front-end and your server back-end (as opposed to pointing your browser to an externally-hosted instance of Shiny-phyloseq, in which case you are uploading and downloading in the usual sense). We have not included any infrastructure in Shiny-phyloseq to archive uploaded data, and any storage of such data is intentionally ephemeral, and only as necessary for the proper functioning of the application. Any deviation from this is by accident, or by a modification of Shiny-phyloseq that is beyond our intent or permission. By design, the <code>Provenance</code> panel provides a means of downloading the complete code <strong>and data</strong> necessary to completely reproduce the set of figures created during a user session. After successful download/transmission, this stored code and data is deleted from the server-side file system.</p>
+</section>
+<section id="acknowledgements" class="level3" data-number="1.0.8">
+<h3 data-number="1.0.8" class="anchored" data-anchor-id="acknowledgements"><span class="header-section-number">1.0.8</span> Acknowledgements</h3>
+<p>Big thanks to <a href="http://shiny.rstudio.com/">Shiny web apps team</a> and Rstudio in general.</p>
+<hr>
+</section>
+</section>
+<section id="data-input-panel-details" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Data Input Panel Details</h1>
+<p>This current panel is a limited but hopefully useful interface to phyloseq’s <a href="http://joey711.github.io/phyloseq/import-data.html">Data Import Infrastructure</a>.</p>
+<p>Filtering can be done on the next panel to the right after the data has been uploaded and selected.</p>
+<section id="select-dataset" class="level3" data-number="2.0.1">
+<h3 data-number="2.0.1" class="anchored" data-anchor-id="select-dataset"><span class="header-section-number">2.0.1</span> Select Dataset</h3>
+<p>This is the first and most-critical selection widget in Shiny-phyloseq. It determines which dataset to use as the starting point of an analysis. Changing or resetting the name displayed in this widget to a new value will cause a cascading reset of most other widgets in the rest of the app, because many refer to annotation elements that are specific to the selected dataset. Only one dataset can be selected at a time. The list of available datasets shown in this widget will update instantly after any new datasets are loaded. The most recently provided dataset is selected by default, therefore uploading a new dataset will automatically make it the selected “live” dataset displayed in every subsequent panel and graphic.</p>
+<p>There are many default datasets included in the app and available for selection.</p>
+<ul>
+<li><strong>closed_1457_uparse</strong> - Kostic et al <em>Genomic analysis identifies association of Fusobacterium with colorectal carcinoma</em></li>
+</ul>
+<ol start="2012" type="1">
+<li><a href="http://genome.cshlp.org/content/22/2/292.long">Genome research 22(2) 292-298</a>. In this case closed-reference OTU-clustering of the publicly available 16S rRNA sequences has been re-performed using <a href="http://drive5.com/uparse/">UPARSE</a> and each OTU has been taxonomically classified by its match in <a href="http://greengenes.secondgenome.com/downloads">the GreenGenes reference database</a> <code>ver13_8</code>.</li>
+</ol>
+<ul>
+<li><strong>study_1457_kostic</strong> - This is the same experimental data as above, but the original publicly available counts corresponding to the default OTU-clustering and classification procedure of the QIIME-DB</li>
+<li><strong>GlobalPatterns</strong> - Caporaso et al.&nbsp;(2011). <em>Global patterns of 16S rRNA diversity at a depth of millions of sequences per sample</em>. <a href="http://www.pnas.org/content/108/suppl.1/4516.short">PNAS 108 4516-4522. PMCID: PMC3063599</a></li>
+<li><strong>enterotype</strong> - Arumugam et al.&nbsp;(2011). <em>Enterotypes of the human gut microbiome</em>. <a href="http://www.nature.com/doifinder/10.1038/nature09944">Nature, 473(7346), 174-180</a>. OTU-clustered data was downloaded from <a href="http://www.bork.embl.de/Docu/Arumugam_et_al_2011/downloads.html">this publicly-accessible link</a></li>
+<li><strong>esophagus</strong> - Pei et al (2004). <em>Bacterial biota in the human distal esophagus</em> <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC384727">PNAS 101(12), 4250-4255</a>. This data is derived from <a href="http://www.mothur.org/">mothur</a>-processed files. The sequence data can be downloaded from a zip-file, along with additional description at <a href="http://www.mothur.org/wiki/Esophageal_community_analysis">this link URL</a>.</li>
+</ul>
+</section>
+<section id="upload-biom-format-file" class="level3" data-number="2.0.2">
+<h3 data-number="2.0.2" class="anchored" data-anchor-id="upload-biom-format-file"><span class="header-section-number">2.0.2</span> Upload Biom-Format File</h3>
+<p>Click the <code>Choose Files</code> button to upload a biom-format file from your local system. Behind the scenes it will be processed into a native phyloseq data structure in R. If successfully processed, its name will be made available as the selected dataset in the <code>Select Dataset</code> list, as described above.</p>
+</section>
+<section id="upload-.rdata-file" class="level3" data-number="2.0.3">
+<h3 data-number="2.0.3" class="anchored" data-anchor-id="upload-.rdata-file"><span class="header-section-number">2.0.3</span> Upload “.RData” File</h3>
+<p>This is the same concept as for the previous biom-file upload, except in this case the file is a binary <a href="">.RData</a> format that contains one or more datasets that are already in native phyloseq data structure. This is useful for the following scenarios</p>
+<ul>
+<li>You already imported your data in R using a relevant <code>import_*</code> function in phyloseq, either because you already use phyloseq or because you needed to make some subtle modifications prior to Shiny-phyloseq</li>
+<li>You want to “batch” upload many datasets at once</li>
+</ul>
+</section>
+<section id="upload-tree-file" class="level3" data-number="2.0.4">
+<h3 data-number="2.0.4" class="anchored" data-anchor-id="upload-tree-file"><span class="header-section-number">2.0.4</span> Upload Tree File</h3>
+<p>This is a special file-upload option that will attempt to read/process a Newick or Nexus format phylogenetic tree. If successful, it will attempt to add (if missing) or replace (if present) the phylogenetic tree component of the currently-selected dataset. It is essential that the tip labels encoded in the tree file match exactly their respective OTUs in the currently-selected dataset. Tree file processing will be conducted using phyloseq’s <code>read_tree</code> function, and then merged with the currently-selected dataset using <code>merge_phyloseq</code>. See phyloseq’s <a href="http://joey711.github.io/phyloseq/import-data.html">import_data</a> page for further details.</p>
+<p>Note that the other upload/load widgets in this data selection panel add new whole datasets for selection, whereas this upload will result in adding/replacing the tree, provided that the initial tree file processing is successful.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
