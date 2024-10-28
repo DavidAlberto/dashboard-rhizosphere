@@ -58,6 +58,7 @@ source $HOME/miniconda/bin/activate
 conda create -p .venv python=3.12 -y
 conda activate .venv
 pip install -r requirements.txt
+conda deactivate
 ```
 
 ### R Environment Setup
@@ -67,6 +68,7 @@ conda create -p .renv r-base=4.3.3 -y
 conda activate .renv
 conda install -c conda-forge r-essentials r-tidyverse quarto -y
 Rscript setup.R
+conda deactivate
 ```
 
 ### Quarto Installation
