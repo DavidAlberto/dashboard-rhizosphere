@@ -78,15 +78,29 @@ check_conda_init() {
 # Function to initialize conda in the current shell
 initialize_conda() {
     log_info "Initializing conda for current shell..."
+    # Ensure conda is in PATH
+    if [[ ! ":$PATH:" == *":$HOME/miniconda/bin:"* ]]; then
+        export PATH="$HOME/miniconda/bin:$PATH"
+    fi
     # Initialize conda for current shell session
-    eval "$(conda shell.bash hook)" || \
-        handle_error ${LINENO} "Failed to set up conda shell hooks"
+    if [ -f "$HOME/miniconda/etc/profile.d/conda.sh" ]; then
+        log_info "Sourcing conda.sh..."
+        . "$HOME/miniconda/etc/profile.d/conda.sh"
+    else
+        log_warning "conda.sh not found, trying alternative initialization..."
+        eval "$(conda shell.bash hook)" || handle_error ${LINENO} "Failed to set up conda shell hooks"
+    fi
     # Initialize conda for future shell sessions
-    conda init bash || \
-        handle_error ${LINENO} "Failed to initialize conda for bash"
-    # Source bashrc to apply changes in current session
-    source ~/.bashrc || \
-        handle_error ${LINENO} "Failed to source ~/.bashrc"
+    conda init bash || handle_error ${LINENO} "Failed to initialize conda for bash"
+    # Reload shell configuration
+    if [ -f ~/.bashrc ]; then
+        log_info "Reloading shell configuration..."
+        . ~/.bashrc
+    fi
+    # Verify initialization
+    if ! conda info --envs &> /dev/null; then
+        handle_error ${LINENO} "Conda initialization failed verification"
+    fi
     log_success "Conda initialized successfully"
 }
 
@@ -134,8 +148,12 @@ setup_env() {
     local env_name=$1
     local python_version=$2
     shift 2
-    local packages=("$@")
+    local packages=("$@")  
     log_info "Setting up environment: $env_name"
+    # Ensure conda is initialized before proceeding
+    if ! check_conda_init; then
+        initialize_conda
+    fi
     # Clean up existing environment if present
     if [ -d "$env_name" ]; then
         log_warning "Removing existing environment: $env_name"
@@ -154,8 +172,16 @@ setup_env() {
     # Activate environment using absolute path
     local full_env_path="$(pwd)/$env_name"
     log_info "Activating environment: $full_env_path"
-    conda activate "$full_env_path" || \
-        handle_error ${LINENO} "Failed to activate environment"
+    # Try multiple activation methods
+    if ! conda activate "$full_env_path" 2>/dev/null; then
+        if ! source activate "$full_env_path" 2>/dev/null; then
+            handle_error ${LINENO} "Failed to activate environment using both conda activate and source activate"
+        fi
+    fi
+    # Verify activation
+    if [[ "$(conda info --envs | grep '*' | awk '{print $1}')" != "$full_env_path" ]]; then
+        handle_error ${LINENO} "Environment activation verification failed"
+    fi
     # Install requested packages if any
     if [ ${#packages[@]} -ne 0 ]; then
         log_info "Installing conda packages: ${packages[*]}"
