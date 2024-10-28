@@ -172,15 +172,16 @@ setup_env() {
     # Activate environment using absolute path
     local full_env_path="$(pwd)/$env_name"
     log_info "Activating environment: $full_env_path"
-    # Try multiple activation methods
-    if ! conda activate "$full_env_path" 2>/dev/null; then
-        if ! source activate "$full_env_path" 2>/dev/null; then
-            handle_error ${LINENO} "Failed to activate environment using both conda activate and source activate"
-        fi
-    fi
+    CONDA_BASE=$(conda info --base)
+    source "$CONDA_BASE/etc/profile.d/conda.sh"
+    conda activate "$full_env_path" || handle_error ${LINENO} "Failed to activate conda environment"
     # Verify activation
-    if [[ "$(conda info --envs | grep '*' | awk '{print $1}')" != "$full_env_path" ]]; then
-        handle_error ${LINENO} "Environment activation verification failed"
+    if [ "$CONDA_DEFAULT_ENV" != "$full_env_path" ]; then
+        log_warning "Direct verification failed, trying alternative verification..."
+        # Alternative verification using conda env list
+        if ! conda env list | grep -q "*.*$full_env_path"; then
+            handle_error ${LINENO} "Environment activation verification failed"
+        fi
     fi
     # Install requested packages if any
     if [ ${#packages[@]} -ne 0 ]; then
@@ -191,15 +192,15 @@ setup_env() {
 }
 
 # Set up Python environment
-log_info "Setting up Python environment..."
-setup_env ".venv" "3.12"
-pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu118 || \
-    handle_error ${LINENO} "Failed to install Python dependencies"
-conda deactivate || handle_error ${LINENO} "Failed to deactivate Miniconda"
+# log_info "Setting up Python environment..."
+# setup_env ".venv" "3.12"
+# pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu118 || \
+#     handle_error ${LINENO} "Failed to install Python dependencies"
+# conda deactivate || handle_error ${LINENO} "Failed to deactivate Miniconda"
 
 # Set up R environment
 log_info "Setting up R environment..."
-setup_env ".renv" "" conda-forge r-base=4.4.3 r-essentials r-tidyverse quarto
+setup_env ".renv" "" r-base=4.3 r-essentials r-tidyverse quarto -c conda-forge
 log_info "Installing R packages..."
 Rscript setup.R || handle_error ${LINENO} "Failed to install R packages"
 conda deactivate || handle_error ${LINENO} "Failed to deactivate Miniconda"
