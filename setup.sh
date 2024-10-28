@@ -120,8 +120,7 @@ if [ ! -d "dashboard-rhizosphere" ]; then
         # handle_error ${LINENO} "Failed to clone the repository"
     # for testing
     git clone -b dev --single-branch https://github.com/DavidAlberto/dashboard-rhizosphere.git || \
-        # handle_error ${LINENO} "Failed to clone the repository"
-
+        handle_error ${LINENO} "Failed to clone the repository"
 fi
 cd dashboard-rhizosphere || handle_error ${LINENO} "Failed to enter the project directory"
 
