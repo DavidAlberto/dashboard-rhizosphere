@@ -53,10 +53,12 @@ setup_env() {
 # Set up Python environment
 setup_env ".venv" "3.12"
 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu118 || handle_error "Failed to install Python dependencies including PyTorch"
+conda deactivate || handle_error "Failed to deactivate Miniconda"
 
 # Set up R environment
-setup_env ".renv" "" r-base=4.3.3 r-essentials r-tidyverse quarto
+setup_env ".renv" "" r-base=4.4.3 r-essentials r-tidyverse quarto
 Rscript setup.R || handle_error "Failed to install R packages"
+conda deactivate || handle_error "Failed to deactivate Miniconda"
 
 # Install Quarto
 if ! command -v quarto &> /dev/null; then
