@@ -116,8 +116,12 @@ log_info "Setting up repository..."
 # Clone the repository
 if [ ! -d "dashboard-rhizosphere" ]; then
     log_info "Cloning repository..."
-    git clone https://github.com/DavidAlberto/dashboard-rhizosphere.git || \
-        handle_error ${LINENO} "Failed to clone the repository"
+    # git clone https://github.com/DavidAlberto/dashboard-rhizosphere.git || \
+        # handle_error ${LINENO} "Failed to clone the repository"
+    # for testing
+    git clone -b dev --single-branch https://github.com/DavidAlberto/dashboard-rhizosphere.git || \
+        # handle_error ${LINENO} "Failed to clone the repository"
+
 fi
 cd dashboard-rhizosphere || handle_error ${LINENO} "Failed to enter the project directory"
 
