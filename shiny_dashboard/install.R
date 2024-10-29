@@ -23,7 +23,7 @@ required_packages <- c(
   phyloseq = "1.48.0", biomformat = "1.32.0", shiny = "1.9.1",
   shinythemes = "1.2.0", ggplot2 = "3.5.1", data.table = "1.16.2",
   networkD3 = "0.4", genefilter = "1.86.0", grid = "4.4.1",
-  gridExtra = "2.3", markdown = "1.13", rmarkdown = "2.28",
+  gridExtra = "2.3", markdown = "1.13", rmarkdown = "2.28", bslib = "0.8.0",
   png = "0.1.8", RColorBrewer = "1.1.3", scales = "1.3.0", DT = "0.33"
 )
 

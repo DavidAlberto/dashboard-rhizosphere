@@ -131,7 +131,7 @@ get_facet_grid <- function(facetrow=NULL, facetcol=NULL) {
 }
 
 ## Convert phyloseq object to table
-tablify_phyloseq_component <- function(component, colmax=25L) {
+tablify_phyloseq_component <- function(component, colmax = 25L) {
   if (inherits(component, "sample_data")) {
     Table <- data.frame(component)
   }
@@ -149,10 +149,10 @@ tablify_phyloseq_component <- function(component, colmax=25L) {
 
 ## Filter components of phyloseq object
 component_options <- function(physeq) {
-  component_option_list <- list("NULL"="NULL")
-  nonEmpty <- sapply(slotNames(physeq),
-                     function(x, ps) { !is.null(access(ps, x)) }, ps = physeq)
-  if (sum(nonEmpty)<1) { return(NULL) }
+  component_option_list <- list("NULL" = "NULL")
+  nonEmpty <- as.logical(sapply(slotNames(physeq),
+                     function(x, ps) { !is.null(access(ps, x)) }, ps = physeq))
+  if (sum(nonEmpty) < 1) { return(NULL) }
   nonEmpty <- names(nonEmpty)[nonEmpty]
   nonEmpty <- nonEmpty[!nonEmpty %in% c("phy_tree", "refseq")]
   if (length(nonEmpty)<1) { return(component_option_list) }
