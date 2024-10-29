@@ -195,17 +195,19 @@ setup_env() {
 }
 
 # Set up Python environment
-# log_info "Setting up Python environment..."
-# setup_env ".venv" "3.12"
+log_info "Setting up Python environment..."
+setup_env ".venv" "3.12"
 # pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu118 || \
 #     handle_error ${LINENO} "Failed to install Python dependencies"
-# conda deactivate || handle_error ${LINENO} "Failed to deactivate Miniconda"
+conda deactivate || handle_error ${LINENO} "Failed to deactivate Miniconda"
 
 # Set up R environment
 log_info "Setting up R environment..."
-setup_env ".renv" "" r-base=4.3 r-essentials r-tidyverse quarto -c conda-forge
-log_info "Installing R packages..."
-Rscript setup.R || handle_error ${LINENO} "Failed to install R packages"
+setup_env ".renv" "" r-base=4.3.1
+# log_info "Installing R packages..."
+# conda install -c conda-forge r-essentials r-tidyverse quarto -y || \
+#     handle_error ${LINENO} "Failed to install R packages"
+# Rscript setup.R || handle_error ${LINENO} "Failed to install R packages"
 conda deactivate || handle_error ${LINENO} "Failed to deactivate Miniconda"
 
 # Install Quarto
