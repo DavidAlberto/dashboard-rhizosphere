@@ -1,4 +1,5 @@
 # Data Panel UI
+## Define the UIX available components
 datapage <- fluidPage(
   headerPanel("Dataset Upload and Selection"),
   sidebarPanel(
@@ -18,11 +19,13 @@ datapage <- fluidPage(
     h4("Data Summary"),
     htmlOutput("contents"),
     h4("Display Component Table"),
-    fluidRow(
-      column(width = 12,
-        div(class = "col-md-8", uiOutput("uix_available_components_orig")),
-        div(class = "col-md-3", numericInputRow("component_table_colmax", "Max. Columns",
-          value = 25L, min = 1L, step = 5L, class = "col-md-12")))),
+    fluidRow(column(width = 12,
+                    div(class = "col-md-8", uiOutput("uix_available_components_orig")),
+                    div(class = "col-md-3",
+                        numericInputRow(inputId = "component_table_colmax",
+                                        label = "Max. Columns",
+                                        value = 25L, min = 1L,
+                                        step = 5L, class = "col-md-12")))),
     dataTableOutput("ps0ComponentTable")
   ),
   fluidRow(column(width = 12, includeMarkdown("panels/paneldoc/data.md")))

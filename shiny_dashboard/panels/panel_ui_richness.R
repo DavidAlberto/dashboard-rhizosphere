@@ -1,6 +1,9 @@
 # Richness Panel UI
+## Define the UIX alpha measures
 richmeasvars <- c("Observed", "Chao1", "ACE", "Shannon",
                   "Simpson", "InvSimpson", "Fisher")
+
+## Define the UIX display
 sbp_rich <- sidebarPanel(
   h4("Aesthetic Mapping"),
   fluidRow(column(width = 12,
@@ -15,10 +18,12 @@ sbp_rich <- sidebarPanel(
                                   selected = c("Shannon", "Chao1"),
                                   multiple = TRUE)),
                   div(class = "col-md-3",
-                      numericInputRow("label_size_rich", "Lab Sz", 3, 0.5, step = 0.5,
-                                      class = "col-md-12")),
+                      numericInputRow(inputId = "label_size_rich",
+                                      label = "Lab Sz", value = 3, min = 0.5,
+                                      step = 0.5, class = "col-md-12")),
                   div(class = "col-md-3",
-                      numericInputRow("label_vjust_rich", "V-Just", 2, 0,
+                      numericInputRow(inputId = "label_vjust_rich",
+                                      label = "V-Just", value = 2, min = 0,
                                       class = "col-md-12"))
   )),
   h4("Details"),
@@ -34,7 +39,7 @@ sbp_rich <- sidebarPanel(
                                     value = 30L, min = 0L,
                                     step = 1L, class = "col-md-12")),
                   div(class = "col-md-4",
-                    numericInputRow("x_axis_angle_rich",
+                    numericInputRow(inputId = "x_axis_angle_rich",
                                     label = "Angle",
                                     value = 90, min = 0, max = 360,
                                     step = 45, class = "col-md-12")),
@@ -48,7 +53,8 @@ sbp_rich <- sidebarPanel(
   dim_and_down("_rich")
 )
 
-richpage <- fluidPage(
+## Richness Server
+richpage <- fluidPage(theme = shinytheme("cosmo"),
   headerPanel("Alpha Diversity Estimates", "windowTitle"),
   fluidRow(
     sbp_rich,
