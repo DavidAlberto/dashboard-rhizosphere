@@ -1,22 +1,29 @@
 # Richness Panel Server
+## Define the UIX metadata
 output$rich_uix_x <- renderUI({
   selectInput(inputId = "x_rich",
               label = "Metadata",
               choices = c(list("samples"), vars("samples")),
               selected = "samples")
 })
+
+## Define the UIX color
 output$rich_uix_color <- renderUI({
   selectInput(inputId = "color_rich",
               label = "Color",
               choices = c(list("samples"), vars("samples")),
               selected = "NULL")
 })
+
+## Define the UIX shape
 output$rich_uix_shape <- renderUI({
   selectInput(inputId = "shape_rich",
               label = "Shape",
               choices = c(list("samples"), vars("samples")),
               selected = "NULL")
 })
+
+## Define the UIX label
 output$rich_uix_label <- renderUI({
   selectInput(inputId = "label_rich",
               label = "Label",

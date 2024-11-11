@@ -2,7 +2,8 @@
 ## Filter subset taxa expression cascade
 output$filter_uix_subset_taxa_ranks <- renderUI({
   rankNames <- list("NULL" = "NULL")
-  rankNames <- c(rankNames, as.list(rank_names(get_phyloseq_data(), errorIfNULL = FALSE)))
+  rankNames <- c(rankNames,
+                 as.list(rank_names(get_phyloseq_data(), errorIfNULL = FALSE)))
   rankNames <- c(rankNames, list(OTU = "OTU"))
   return(
     selectInput(inputId = "filter_rank", label = "Subset Taxa by Rank",
@@ -30,7 +31,8 @@ output$filter_uix_subset_taxa_select <- renderUI({
 ## Filter subset samples expression cascade
 output$filter_uix_subset_sample_vars <- renderUI({
   sampVars <- list("NULL" = "NULL")
-  sampVars <- c(sampVars, as.list(sample_variables(get_phyloseq_data(), errorIfNULL=FALSE)))
+  sampVars <- c(sampVars,
+                as.list(sample_variables(get_phyloseq_data(), errorIfNULL = FALSE)))
   sampVars <- c(sampVars, list(Sample = "Sample"))
   return(
     selectInput(inputId = "filter_samvars", label = "Sample Variables",
@@ -113,7 +115,7 @@ physeq <- reactive({
         if (input$filter_kOverA_sample_threshold > 1) {
           flist <- genefilter::filterfun(
             genefilter::kOverA(input$filter_kOverA_sample_threshold,
-                               input$filter_kOverA_count_threshold, na.rm=TRUE)
+                               input$filter_kOverA_count_threshold, na.rm = TRUE)
           )
           koatry <- try(ps0 <- filter_taxa(ps0, flist, prune = TRUE), silent = TRUE)
           if (inherits(koatry, "try-error")) {
@@ -180,7 +182,7 @@ maxSamples <- reactive({
   }
 })
 output$filter_ui_kOverA_k <- renderUI({
-  numericInputRow("filter_kOverA_sample_threshold", "k",
+  numericInputRow(inputId = "filter_kOverA_sample_threshold", label = "k",
                   min = 0, max = maxSamples(), value = kovera_k,
                   step = 1, class = "col-md-12")
 })
@@ -207,32 +209,43 @@ sums_hist <- function(thesums = NULL, xlab = "", ylab = "") {
   return(p)
 }
 
-## Create marginal histograms
+## Create marginal histograms for library sizes and OTU totals
 lib_size_hist <- reactive({
   xlab <- "Number of Reads (Counts)"
   ylab <- "Number of Libraries"
   return(sums_hist(sample_sums(get_phyloseq_data()), xlab, ylab))
 })
+
+## Create marginal histograms for OTU totals
 otu_sum_hist <- reactive({
   xlab <- "Number of Reads (Counts)"
   ylab <- "Number of OTUs"
   return(sums_hist(taxa_sums(get_phyloseq_data()), xlab, ylab))
 })
+
+## Create text output of sample variables
 output$sample_variables <- renderText({
   return(
-    paste0(sample_variables(get_phyloseq_data(), errorIfNULL = FALSE), collapse = ", ")
-)})
+    paste0(sample_variables(get_phyloseq_data(), errorIfNULL = FALSE), collapse = ", "))
+})
+
+## Create text output of rank names
 output$rank_names <- renderText({
   return(
-    paste0(rank_names(get_phyloseq_data(), errorIfNULL = FALSE), collapse = ", ")
-)})
+    paste0(rank_names(get_phyloseq_data(), errorIfNULL = FALSE), collapse = ", "))
+})
+
+## Create plot of before and after filtering
 output$filter_summary_plot <- renderPlot({
   plib0 <- lib_size_hist() + ggtitle("Original Data")
   potu0 <- otu_sum_hist() + ggtitle("Original Data")
   if (inherits(physeq(), "phyloseq")) {
-    potu1 <- sums_hist(taxa_sums(physeq()), xlab = "Number of Reads (Counts)", ylab = "Number of OTUs") +
+    potu1 <- sums_hist(taxa_sums(physeq()),
+                       xlab = "Number of Reads (Counts)",
+                       ylab = "Number of OTUs") +
       ggtitle("Filtered Data")
-    plib1 <- sums_hist(sample_sums(physeq()), xlab = "Number of Reads (Counts)",
+    plib1 <- sums_hist(sample_sums(physeq()),
+                       xlab = "Number of Reads (Counts)",
                        ylab = "Number of Libraries") +
       ggtitle("Filtered Data")
   } else {
@@ -252,6 +265,9 @@ output$physeqComponentTable <- DT::renderDT({
   if (is.null(av(input$available_components_filt))) {
     return(NULL)
   }
-  component <- do.call(what = input$available_components_filt, args = list(physeq()))
-  return(tablify_phyloseq_component(component, input$component_table_colmax_filt))
-  }, options = list(pageLength = 5))
+  component <- do.call(what = input$available_components_filt,
+                       args = list(physeq()))
+  return(tablify_phyloseq_component(component,
+                                    input$component_table_colmax_filt))
+},
+options = list(pageLength = 5))

@@ -1,4 +1,5 @@
 # Filter Panel UI
+##  Define the UIX subset taxa ranks
 filterpage <- fluidPage(
   headerPanel("Basic Data Filtering"),
   fluidRow(
@@ -17,17 +18,22 @@ filterpage <- fluidPage(
       h4("Total Sums Filtering"),
       fluidRow(column(width = 12,
                       div(class = "col-md-6",
-                          numericInputRow("filter_sample_sums_threshold", "Sample Min.",
-                                          value = SampleSumDefault, min = 0, step = 100, class = "col-md-12")),
+                          numericInputRow(inputId = "filter_sample_sums_threshold",
+                                          label = "Sample Min.",
+                                          value = SampleSumDefault, min = 0,
+                                          step = 100, class = "col-md-12")),
                       div(class = "col-md-6",
-                          numericInputRow("filter_taxa_sums_threshold", "Taxa Min.",
-                                          value = OTUSumDefault, min = 0, step = 1, class = "col-md-12"))
+                          numericInputRow(inputId = "filter_taxa_sums_threshold",
+                                          label = "Taxa Min.",
+                                          value = OTUSumDefault, min = 0,
+                                          step = 1, class = "col-md-12"))
       )),
       h4("kOverA OTU Filtering"),
       fluidRow(column(width = 12,
                       div(class = "col-md-3",
-                          numericInputRow("filter_kOverA_count_threshold", "A",
-                                          value = kovera_A, min = 0, step = 1, class = "col-md-12")),
+                          numericInputRow(inputId = "filter_kOverA_count_threshold",
+                                          label = "A", value = kovera_A, min = 0,
+                                          step = 1, class = "col-md-12")),
                       div(class = "col-md-3", uiOutput("filter_ui_kOverA_k"))
       ))
     ),
@@ -47,10 +53,12 @@ filterpage <- fluidPage(
                htmlOutput("filtered_contents")
       )),
       h4("Component Table, Filtered Data"),
-      fluidRow(column(width=12,
+      fluidRow(column(width = 12,
         div(class = "col-md-8", uiOutput("uix_available_components_filt")),
-        div(class = "col-md-3", numericInputRow("component_table_colmax_filt", "Max. Columns",
-                                                value = 25L, min = 1L, step = 5L, class = "col-md-12"))
+        div(class = "col-md-3", numericInputRow(inputId = "component_table_colmax_filt",
+                                                label = "Max. Columns",
+                                                value = 25L, min = 1L,
+                                                step = 5L, class = "col-md-12"))
       )),
       dataTableOutput("physeqComponentTable")
     )
