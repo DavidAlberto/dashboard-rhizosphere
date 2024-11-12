@@ -61,7 +61,6 @@ shinyServer(function(input, output) {
   }
   # Load other panel modules
   source("panels/panel_server_bar.R", local = TRUE)
-  source("panels/panel_server_tree.R", local = TRUE)
   source("panels/panel_server_heatmap.R", local = TRUE)
   source("panels/panel_server_richness.R", local = TRUE)
   source("panels/panel_server_ordination.R", local = TRUE)

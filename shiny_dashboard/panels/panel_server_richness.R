@@ -97,8 +97,8 @@ finalize_richness_plot <- reactive({
 output$richness <- renderPlot({
   shiny_phyloseq_print(finalize_richness_plot())
   },
-  width = function() {72 * input$width_rich},
-  height = function() {72 * input$height_rich}
+width = function() {72 * input$width_rich},
+height = function() {72 * input$height_rich}
 )
 
 # Downloadable file

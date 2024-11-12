@@ -28,14 +28,20 @@ sbp_heat <- sidebarPanel(
   h4("Color Scale"),
   fluidRow(column(width = 12,
                   div(class = "col-md-4",
-                      textInputRow("locolor_heat", "Low",
-                                   "#000033", class = "col-md-12")),
+                      textInputRow(inputId = "locolor_heat",
+                                   label = "Low",
+                                   value = "#000033",
+                                   class = "col-md-12")),
                   div(class = "col-md-4",
-                      textInputRow("hicolor_heat", "High",
-                                   "#66CCFF", class = "col-md-12")),
+                      textInputRow(inputId = "hicolor_heat",
+                                   label = "High",
+                                   value = "#66CCFF",
+                                   class = "col-md-12")),
                   div(class = "col-md-4",
-                      textInputRow("NAcolor_heat", "Missing",
-                                   "black", clas = "col-md-12"))
+                      textInputRow(inputId = "NAcolor_heat",
+                                   label = "Missing",
+                                   value = "black",
+                                   class = "col-md-12"))
   )),
   dim_and_down("_heat")
 )

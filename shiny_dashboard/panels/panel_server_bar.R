@@ -66,7 +66,7 @@ finalize_bar_plot <- reactive({
   isolate({
     p0 <- make_bar_plot()
   })
-  p0 <- p0 + scale_fill_brewer(palette=input$pal_bar) +
+  p0 <- p0 + scale_fill_brewer(palette = input$pal_bar) +
     shiny_phyloseq_ggtheme_list[[input$theme_bar]]
   p0 <- p0 +
     theme(axis.text.x = element_text(angle = input$x_axis_angle_bar,
