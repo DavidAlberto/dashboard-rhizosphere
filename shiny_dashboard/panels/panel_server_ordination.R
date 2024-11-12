@@ -159,7 +159,7 @@ finalize_ordination_plot <- reactive({
         p1 <- p1 + scale_colour_brewer(palette = input$pal_ord)
       } else {
         # Continuous brewer palette mapping
-        p1 <- p1 + scale_colour_distiller(palette=input$pal_ord)
+        p1 <- p1 + scale_colour_distiller(palette = input$pal_ord)
       }
     }
     if (!is.null(av(input$label_ord))) {

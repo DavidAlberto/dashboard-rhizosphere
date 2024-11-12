@@ -6,8 +6,10 @@ output$filter_uix_subset_taxa_ranks <- renderUI({
                  as.list(rank_names(get_phyloseq_data(), errorIfNULL = FALSE)))
   rankNames <- c(rankNames, list(OTU = "OTU"))
   return(
-    selectInput(inputId = "filter_rank", label = "Subset Taxa by Rank",
-                choices = rankNames, selected = "NULL")
+    selectInput(inputId = "filter_rank",
+                label = "Subset Taxa by Rank",
+                choices = rankNames,
+                selected = "NULL")
   )
 })
 
@@ -19,12 +21,16 @@ output$filter_uix_subset_taxa_select <- renderUI({
       rank_list <- c(rank_list, as.list(taxa_names(get_phyloseq_data())))
     } else {
       rank_list <- c(rank_list,
-                     as.list(get_taxa_unique(get_phyloseq_data(), input$filter_rank)))
+                     as.list(get_taxa_unique(get_phyloseq_data(),
+                                             input$filter_rank)))
     }
   }
   return(
-    selectInput(inputId = "filter_rank_selection", label = "Select Taxa",
-                choices = rank_list, selected = "NULL", multiple = TRUE)
+    selectInput(inputId = "filter_rank_selection",
+                label = "Select Taxa",
+                choices = rank_list,
+                selected = "NULL",
+                multiple = TRUE)
   )
 })
 
@@ -32,11 +38,15 @@ output$filter_uix_subset_taxa_select <- renderUI({
 output$filter_uix_subset_sample_vars <- renderUI({
   sampVars <- list("NULL" = "NULL")
   sampVars <- c(sampVars,
-                as.list(sample_variables(get_phyloseq_data(), errorIfNULL = FALSE)))
+                as.list(sample_variables(get_phyloseq_data(),
+                                         errorIfNULL = FALSE)))
   sampVars <- c(sampVars, list(Sample = "Sample"))
   return(
-    selectInput(inputId = "filter_samvars", label = "Sample Variables",
-                choices = sampVars, selected = "NULL", multiple = FALSE)
+    selectInput(inputId = "filter_samvars",
+                label = "Sample Variables",
+                choices = sampVars,
+                selected = "NULL",
+                multiple = FALSE)
   )
 })
 
@@ -55,8 +65,11 @@ output$filter_uix_subset_sample_select <- renderUI({
     }
   }
   return(
-    selectInput(inputId = "filter_samvars_selection", label = "Variable Classes",
-                choices = varLevels, selected = "NULL", multiple = TRUE)
+    selectInput(inputId = "filter_samvars_selection",
+                label = "Variable Classes",
+                choices = varLevels,
+                selected = "NULL",
+                multiple = TRUE)
   )
 })
 
@@ -115,9 +128,11 @@ physeq <- reactive({
         if (input$filter_kOverA_sample_threshold > 1) {
           flist <- genefilter::filterfun(
             genefilter::kOverA(input$filter_kOverA_sample_threshold,
-                               input$filter_kOverA_count_threshold, na.rm = TRUE)
+                               input$filter_kOverA_count_threshold,
+                               na.rm = TRUE)
           )
-          koatry <- try(ps0 <- filter_taxa(ps0, flist, prune = TRUE), silent = TRUE)
+          koatry <- try(ps0 <- filter_taxa(ps0, flist, prune = TRUE),
+                        silent = TRUE)
           if (inherits(koatry, "try-error")) {
             warning("kOverA parameters resulted in an error, kOverA filtering skipped.")
           }
@@ -137,7 +152,7 @@ physeqProp <- reactive({
     return(NULL)
   }
   return(
-    transform_sample_counts(physeq(), function(x){x / sum(x)})
+    transform_sample_counts(physeq(), function(x) {x / sum(x)})
   )
 })
 
@@ -186,12 +201,18 @@ output$filter_ui_kOverA_k <- renderUI({
                   min = 0, max = maxSamples(), value = kovera_k,
                   step = 1, class = "col-md-12")
 })
+
+## Render contents of original data
 output$contents <- renderUI({
   output_phyloseq_print_html(get_phyloseq_data())
 })
+
+## Render contents of filtered data
 output$filtered_contents0 <- renderUI({
   output_phyloseq_print_html(get_phyloseq_data())
 })
+
+## Render contents of filtered data
 output$filtered_contents <- renderUI({
   output_phyloseq_print_html(physeq())
 })
@@ -225,14 +246,16 @@ otu_sum_hist <- reactive({
 
 ## Create text output of sample variables
 output$sample_variables <- renderText({
-  return(
-    paste0(sample_variables(get_phyloseq_data(), errorIfNULL = FALSE), collapse = ", "))
+  return(paste0(sample_variables(get_phyloseq_data(),
+                                 errorIfNULL = FALSE),
+                collapse = ", "))
 })
 
 ## Create text output of rank names
 output$rank_names <- renderText({
-  return(
-    paste0(rank_names(get_phyloseq_data(), errorIfNULL = FALSE), collapse = ", "))
+  return(paste0(rank_names(get_phyloseq_data(),
+                           errorIfNULL = FALSE),
+                collapse = ", "))
 })
 
 ## Create plot of before and after filtering

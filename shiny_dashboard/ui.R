@@ -1,53 +1,81 @@
 # UI helper functions
 ## Plot format
 graphicTypeUI <- function(inputId, label = "Format", choices = graphicFormats, selected = "pdf") {
-  selectInput(inputId, label, choices, selected,
-              multiple = FALSE, selectize = TRUE)
+  selectInput(inputId = inputId,
+              label = label,
+              choices = choices,
+              selected = selected,
+              multiple = FALSE,
+              selectize = TRUE)
 }
 
 ## Taxa and sample
 uitype <- function(id = "type", selected = "taxa") {
-  selectInput(inputId = id, label = "Type",
+  selectInput(inputId = id,
+              label = "Type",
               selected = selected,
               choices = list("Taxa" = "taxa", "Samples" = "samples"))
 }
 
 ## Plot Size
 uiptsz <- function(id, ...) {
-  numericInputRow(inputId = id, label = "Size",
-                  min = 1, max = NA, value = 5, step = 1, ...)
+  numericInputRow(inputId = id,
+                  label = "Size",
+                  min = 1,
+                  max = NA,
+                  value = 5,
+                  step = 1, ...)
 }
 
 ## Opacity
 uialpha <- function(id, ...) {
-  numericInputRow(inputId = id, label = "Opacity",
-                  min = 0, max = 1, value = 1, step = 0.1, ...)
+  numericInputRow(inputId = id,
+                  label = "Opacity",
+                  min = 0,
+                  max = 1,
+                  value = 1,
+                  step = 0.1, ...)
 }
 
 ## Color pallete
 uipal <- function(id, default = "Set1") {
-  selectInput(id, "Palette", choices = rownames(RColorBrewer::brewer.pal.info), selected = default
-  )
+  selectInput(inputId =id,
+              label = "Palette",
+              choices = rownames(RColorBrewer::brewer.pal.info),
+              selected = default)
 }
 
 ## Plot theme
 uitheme <- function(id, default="bl_wh"){
-  selectInput(id, "Theme",
+  selectInput(inputId = id,
+              label = "Theme",
               choices = names(shiny_phyloseq_ggtheme_list),
-              selected = default
-  )
+              selected = default)
 }
 
 ## Multi-widget definitions
 dim_and_down <- function(suffix, secTitle = "Dimensions & Download") {
-  fluidRow(
-    column(width = 12,
-      h4(secTitle),
-      div(class = "col-md-3", numericInputRow(paste0("width", suffix), "Width", 8, 1, 100, 1, class = "col-md-12")),
-      div(class = "col-md-3", numericInputRow(paste0("height", suffix), "Height", 8, 1, 100, 1, class = "col-md-12")),
-      div(class = "col-md-3", graphicTypeUI(paste0("downtype", suffix))),
-      div(class = "col-md-3", div(style = "display:inline-block", tags$label("DL"), downloadButton(paste0("download", suffix), "  ")))
-    )
+  fluidRow(column(width = 12,
+                  h4(secTitle),
+                  div(class = "col-md-3",
+                      numericInputRow(inputId = paste0("width", suffix),
+                                      label = "Width",
+                                      value = 8,
+                                      min = 1,
+                                      max = 100,
+                                      step = 1,
+                                      class = "col-md-12")),
+                  div(class = "col-md-3",
+                      numericInputRow(inputId = paste0("height", suffix),
+                                      label = "Height",
+                                      value = 8,
+                                      min = 1,
+                                      max = 100,
+                                      step = 1,
+                                      class = "col-md-12")),
+                  div(class = "col-md-3", graphicTypeUI(paste0("downtype", suffix))),
+                  div(class = "col-md-3", div(style = "display:inline-block", tags$label("DL"),
+                                              downloadButton(paste0("download", suffix), "  "))))
   )
 }
 
@@ -73,11 +101,15 @@ theme_ui_details <- function(suffix, secTitle = "Details", pal = TRUE, them = TR
 # Generic distance UI stuff.
 ## NOTE: not all distance methods are supported if "taxa" selected for type.
 uidist <- function(id, selected = "bray") {
-  return(selectInput(id, "Distance", distlist, selected = selected))
+  return(selectInput(inputId = id,
+                     label = "Distance",
+                     choices = distlist,
+                     selected = selected))
 }
 ## Whether to use proportions or counts
 uicttype <- function(id = "uicttype") {
-  selectInput(inputId = id, label = "Data",
+  selectInput(inputId = id,
+              label = "Data",
               choices = c("Counts", "Proportions"),
               selected = "Counts")
 }
@@ -109,7 +141,6 @@ source("panels/panel_ui_net.R", local = TRUE)
 source("panels/panel_ui_d3.R", local = TRUE)
 source("panels/panel_ui_ordination.R", local = TRUE)
 source("panels/panel_ui_heatmap.R", local = TRUE)
-source("panels/panel_ui_tree.R", local = TRUE)
 source("panels/panel_ui_scatter.R", local = TRUE)
 source("panels/panel_ui_bar.R", local = TRUE)
 source("panels/panel_ui_palette.R", local = TRUE)
@@ -156,7 +187,6 @@ ui <- navbarPage(
   tabPanel("d3Network", d3netpage),
   tabPanel("Ordination", ordpage),
   tabPanel("Heatmap", heatpage),
-  tabPanel("Tree", treepage),
   tabPanel("Scatter", scatpage),
   tabPanel("Bar", barpage),
   tabPanel("Palette", palpage),
