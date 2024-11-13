@@ -3,10 +3,10 @@
 # =============================================================================
 # Setup Script for Dashboard Rhizosphere Project
 # This script sets up the complete development environment including:
-# - Python environment with ML libraries
-# - R environment with tidyverse
-# - Quarto for documentation
-# - Project dependencies and configurations
+# - Git clone of the repository
+# - Miniconda installation
+# - Creation Python and R environment
+# - Quarto installation
 # =============================================================================
 
 # Fail on any error, undefined variable, or pipe failure
@@ -134,8 +134,10 @@ if ! command -v conda &> /dev/null; then
         handle_error ${LINENO} "Failed to download Miniconda"
     bash miniconda.sh -b -p $HOME/miniconda || \
         handle_error ${LINENO} "Failed to install Miniconda"
+    
     # Add conda to PATH for current session
     export PATH="$HOME/miniconda/bin:$PATH"
+
     # Clean up installer
     rm miniconda.sh
     initialize_conda
@@ -148,36 +150,37 @@ fi
 
 # Function to create and configure environment
 setup_env() {
-    local env_name=$1
-    local python_version=$2
-    shift 2
+    local env_dir=$1
+    local env_name=$2
+    local env_version=$3
+    shift 3
     local packages=("$@")  
     log_info "Setting up environment: $env_name"
+    
     # Ensure conda is initialized before proceeding
     if ! check_conda_init; then
         initialize_conda
     fi
+
     # Clean up existing environment if present
-    if [ -d "$env_name" ]; then
-        log_warning "Removing existing environment: $env_name"
-        conda env remove -p "$env_name" -y
+    if [ -d "$env_dir" ]; then
+        log_warning "Removing existing environment: $env_dir"
+        conda env remove -p "$env_dir" -y
     fi
+
     # Create new environment
-    if [ -n "$python_version" ]; then
-        log_info "Creating Python environment with version $python_version"
-        conda create -p "$env_name" python="$python_version" -y || \
-            handle_error ${LINENO} "Failed to create Python environment"
-    else
-        log_info "Creating environment without Python"
-        conda create -p "$env_name" -y || \
-            handle_error ${LINENO} "Failed to create environment"
-    fi
+    log_info "Creating $env_name environment with version $env_version"
+    conda create -p "$env_dir" -c defaults -c conda-forge "$env_name"="$env_version" -y || \
+        handle_error ${LINENO} "Failed to create $env_name environment"
+
     # Activate environment using absolute path
-    local full_env_path="$(pwd)/$env_name"
+    local full_env_path="$(pwd)/$env_dir"
     log_info "Activating environment: $full_env_path"
     CONDA_BASE=$(conda info --base)
     source "$CONDA_BASE/etc/profile.d/conda.sh"
-    conda activate "$full_env_path" || handle_error ${LINENO} "Failed to activate conda environment"
+    conda activate "$full_env_path" || \
+        handle_error ${LINENO} "Failed to activate conda environment"
+
     # Verify activation
     if [ "$CONDA_DEFAULT_ENV" != "$full_env_path" ]; then
         log_warning "Direct verification failed, trying alternative verification..."
@@ -186,6 +189,7 @@ setup_env() {
             handle_error ${LINENO} "Environment activation verification failed"
         fi
     fi
+
     # Install requested packages if any
     if [ ${#packages[@]} -ne 0 ]; then
         log_info "Installing conda packages: ${packages[*]}"
@@ -195,19 +199,16 @@ setup_env() {
 }
 
 # Set up Python environment
-log_info "Setting up Python environment..."
-setup_env ".venv" "3.12"
+# log_info "Setting up Python environment..."
+# setup_env ".venv" "python" "3.12"
 # pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu118 || \
 #     handle_error ${LINENO} "Failed to install Python dependencies"
-conda deactivate || handle_error ${LINENO} "Failed to deactivate Miniconda"
+# conda deactivate || handle_error ${LINENO} "Failed to deactivate Miniconda"
 
 # Set up R environment
 log_info "Setting up R environment..."
-setup_env ".renv" "" r-base=4.3.1
-# log_info "Installing R packages..."
-# conda install -c conda-forge r-essentials r-tidyverse quarto -y || \
-#     handle_error ${LINENO} "Failed to install R packages"
-# Rscript setup.R || handle_error ${LINENO} "Failed to install R packages"
+setup_env ".renv" "r-base" "4.3.1" r-essentials r-tidyverse r-quarto
+Rscript setup.R || handle_error ${LINENO} "Failed to install R packages"
 conda deactivate || handle_error ${LINENO} "Failed to deactivate Miniconda"
 
 # Install Quarto
@@ -225,51 +226,6 @@ if ! command -v quarto &> /dev/null; then
     quarto --version || handle_error ${LINENO} "Failed to verify Quarto installation"
 else
     log_info "Quarto is already installed"
-fi
-
-# Project Configuration
-log_info "Setting up project configuration..."
-
-# Create or verify pyproject.toml
-if [ ! -f "pyproject.toml" ]; then
-    log_info "Creating pyproject.toml..."
-    cat << EOF > pyproject.toml
-[build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
-
-[project]
-name = "Dashboard Rhizosphere Project"
-version = "0.1.0"
-description = "A comprehensive dashboard for rhizosphere data analysis"
-requires-python = ">=3.12"
-dependencies = [
-    "numpy>=1.24.0",
-    "pandas>=2.0.0",
-    "dash>=2.10.0",
-    "scikit-learn>=1.3.0",
-    "tensorflow>=2.13.0",
-    "keras>=2.13.0",
-    "matplotlib>=3.7.0",
-    "seaborn>=0.12.0",
-    "xgboost>=2.0.0",
-    "lightgbm>=4.0.0",
-    "torch>=2.0.0",
-    "torchvision>=0.15.0",
-    "torchaudio>=2.0.0"
-]
-
-[tool.pip]
-extra-index-url = "https://download.pytorch.org/whl/cu118"
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=7.0.0",
-    "black>=23.0.0",
-    "isort>=5.0.0",
-    "flake8>=6.0.0"
-]
-EOF
 fi
 
 # Final Validation
