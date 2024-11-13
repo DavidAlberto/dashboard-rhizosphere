@@ -176,8 +176,8 @@ setup_env() {
     # Activate environment using absolute path
     local full_env_path="$(pwd)/$env_dir"
     log_info "Activating environment: $full_env_path"
-    CONDA_BASE=$(conda info --base)
-    source "$CONDA_BASE/etc/profile.d/conda.sh"
+    # CONDA_BASE=$(conda info --base)
+    # source "$CONDA_BASE/etc/profile.d/conda.sh"
     conda activate "$full_env_path" || \
         handle_error ${LINENO} "Failed to activate conda environment"
 
