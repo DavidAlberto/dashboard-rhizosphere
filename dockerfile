@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
 
 # Clone the repo
 WORKDIR /app
-RUN git clone https://github.com/DavidAlberto/dashboard-rhizosphere.git
+RUN git clone -b dev --single-branch https://github.com/DavidAlberto/dashboard-rhizosphere.git
 
 # Run the setup script
 WORKDIR /app/dashboard-rhizosphere
