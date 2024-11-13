@@ -1,6 +1,6 @@
 # Dashboard Rhizosphere Project Setup Guide
 
-This README provides instructions for setting up the development environment for the Dashboard Rhizosphere Project, including Conda installation, creation of virtual environments, and installation of packages for R and Python.
+This README provides instructions for setting up the development environment for the Dashboard Rhizosphere Project, including Conda installation, creation of R environment and installation of packages.
 
 ## Table of Contents
 1. [Prerequisites](#prerequisites)
@@ -8,12 +8,9 @@ This README provides instructions for setting up the development environment for
 3. [Manual Setup](#manual-setup)
    - [Clone the Repository](#clone-the-repository)
    - [Conda Installation](#conda-installation)
-   - [Python Environment Setup](#python-environment-setup)
    - [R Environment Setup](#r-environment-setup)
    - [Quarto Installation](#quarto-installation)
-   - [Python Project Configuration](#python-project-configuration)
-4. [Using the Environments](#using-the-environments)
-5. [Troubleshooting](#troubleshooting)
+4. [Troubleshooting](#troubleshooting)
 
 ## Prerequisites
 
@@ -51,22 +48,11 @@ wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda
 source $HOME/miniconda/bin/activate
 ```
-
-### Python Environment Setup
-
-```bash
-conda create -p .venv python=3.12 -y
-conda activate .venv
-pip install -r requirements.txt
-conda deactivate
-```
-
 ### R Environment Setup
 
 ```bash
-conda create -p .renv r-base=4.3.1 -y
+conda env create -f environment.yml --prefix .renv
 conda activate .renv
-conda install -c conda-forge r-essentials r-tidyverse quarto -y
 Rscript setup.R
 conda deactivate
 ```
@@ -82,19 +68,6 @@ sudo apt-get install -f
 ```
 
 For other systems or for the latest version, please refer to the [official Quarto documentation](https://quarto.org/docs/get-started/).
-
-### Python Project Configuration
-
-The `pyproject.toml` file is already included in the repository. If you need to modify it:
-
-```bash
-nano pyproject.toml
-```
-
-## Using the Environments
-
-- To activate the Python environment: `conda activate .venv`
-- To activate the R environment: `conda activate .renv`
 
 ## Troubleshooting
 

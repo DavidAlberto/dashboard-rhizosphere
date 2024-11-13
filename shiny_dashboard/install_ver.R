@@ -1,8 +1,7 @@
 # Check R version
 r_min_version <- "4.3.0"
 if (compareVersion(as.character(getRversion()), r_min_version) < 0) {
-  stop("R version ", r_min_version,
-       " or higher is required. Please update R from http://cran.r-project.org/")
+  stop("R version ", r_min_version, " or higher is required. Please update R from http://cran.r-project.org/")
 }
 
 # Install or update BiocManager
@@ -13,20 +12,19 @@ BiocManager::install(update = TRUE, ask = FALSE)
 
 # Function to install or update packages
 install_or_update_package <- function(pkg, version = NULL) {
-  if (!requireNamespace(pkg, quietly = TRUE) ||
-        (is.null(version) &&
-           !is.null(packageVersion(pkg)) &&
-           packageVersion(pkg) < version)) {
+  if (!requireNamespace(pkg, quietly = TRUE) || (is.null(version) && !is.null(packageVersion(pkg)) && packageVersion(pkg) < version)) {
     message("Installing/updating package: ", pkg)
     BiocManager::install(pkg, update = FALSE, ask = FALSE)
   }
 }
 
-# List of required packages
+# List of required packages with versions
 required_packages <- c(
-  shiny, shinythemes, DT, phyloseq, biomformat, ggplot2, data.table,
-  networkD3, genefilter, grid, gridExtra, markdown, rmarkdown, bslib,
-  png, RColorBrewer, scales
+  phyloseq = "1.48.0", biomformat = "1.32.0", shiny = "1.9.1",
+  shinythemes = "1.2.0", ggplot2 = "3.5.1", data.table = "1.16.2",
+  networkD3 = "0.4", genefilter = "1.86.0", grid = "4.4.1",
+  gridExtra = "2.3", markdown = "1.13", rmarkdown = "2.28", bslib = "0.8.0",
+  png = "0.1.8", RColorBrewer = "1.1.3", scales = "1.3.0", DT = "0.33"
 )
 
 # Install or update required packages
