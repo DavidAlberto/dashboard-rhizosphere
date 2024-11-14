@@ -1,13 +1,17 @@
-# Conda environments
+# Python environments
 .venv/
 *.conda
 *.yml
+requirements.txt
+pyproject.toml
 
 # R environments
+renv/
 .renv/
 *.Rhistory
 *.Rproj
 *.Rproj.user/
+*.Rprofile
 
 # Others
 README.pdf

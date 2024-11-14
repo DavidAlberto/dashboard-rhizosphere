@@ -5,7 +5,7 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     wget \
     sudo \
@@ -15,11 +15,7 @@ RUN apt-get update && apt-get install -y \
 
 # Clone the repo
 WORKDIR /app
-RUN git clone -b dev --single-branch https://github.com/DavidAlberto/dashboard-rhizosphere.git
-
-# Run the setup script
-WORKDIR /app/dashboard-rhizosphere
-RUN chmod +x setup.sh && ./setup.sh
+RUN curl -sSL https://raw.githubusercontent.com/DavidAlberto/dashboard-rhizosphere/dev/setup.sh | bash
 
 # Expose the port for the dashboard
 # EXPOSE 3838
