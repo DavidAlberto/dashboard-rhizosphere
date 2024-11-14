@@ -3,7 +3,7 @@ options(repos = c(CRAN = "https://cran.rstudio.com/"))
 
 # Check R version
 r_min_version <- "4.3.0"
-if (compareVersion(as.character(getRversion()), R_MIN_VERSION) < 0) {
+if (compareVersion(as.character(getRversion()), r_min_version) < 0) {
   stop("R version ", r_min_version,
        " or higher is required. Please update R from http://cran.r-project.org/")
 }
