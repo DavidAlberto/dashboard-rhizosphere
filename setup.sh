@@ -116,6 +116,12 @@ configure_conda_channels() {
     log_info "Checking conda channels..."
     channels=$(conda config --show channels)
     
+    # Check if defaults channel is already configured
+    if [[ "$channels" != *"defaults"* ]]; then
+        log_info "Adding defaults channel"
+        conda config --add channels defaults
+    fi
+    
     # Check if conda-forge channel is already configured
     if [[ "$channels" != *"conda-forge"* ]]; then
         log_info "Adding conda-forge channel"
@@ -126,19 +132,6 @@ configure_conda_channels() {
     if [[ "$channels" != *"bioconda"* ]]; then
         log_info "Adding bioconda channel"
         conda config --add channels bioconda
-    fi
-
-    # Check if defaults channel is already configured
-    if [[ "$channels" != *"defaults"* ]]; then
-        log_info "Adding defaults channel"
-        conda config --add channels defaults
-    fi
-
-    # Check if nodefaults channel is already configured
-    if [[ "$channels" != *"nodefaults"* ]]; then
-        log_info "Adding nodefaults configuration"
-        conda config --set channel_priority strict
-        conda config --add channels nodefaults
     fi
 
     log_success "Conda channels configured successfully"
