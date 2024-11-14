@@ -154,7 +154,8 @@ setup_env() {
     local env_name=$2
     local env_version=$3
     shift 3
-    local packages=("$@")  
+    local packages=("$@")
+
     log_info "Setting up environment: $env_name"
     
     # Ensure conda is initialized before proceeding
@@ -170,7 +171,7 @@ setup_env() {
 
     # Create new environment
     log_info "Creating $env_name environment with version $env_version"
-    conda create -p "$env_dir" -c defaults -c conda-forge "$env_name"="$env_version" -y || \
+    conda create -p "$env_dir" "$env_name"="$env_version" -y || \
         handle_error ${LINENO} "Failed to create $env_name environment"
 
     # Activate environment using absolute path
@@ -178,12 +179,12 @@ setup_env() {
     log_info "Activating environment: $full_env_path"
     CONDA_BASE=$(conda info --base)
     source "$CONDA_BASE/etc/profile.d/conda.sh"
-    conda activate "$full_env_path" || \
-        handle_error ${LINENO} "Failed to activate conda environment"
+    conda activate "$full_env_path" || handle_error ${LINENO} "Failed to activate conda environment"
 
     # Verify activation
     if [ "$CONDA_DEFAULT_ENV" != "$full_env_path" ]; then
         log_warning "Direct verification failed, trying alternative verification..."
+        
         # Alternative verification using conda env list
         if ! conda env list | grep -q "*.*$full_env_path"; then
             handle_error ${LINENO} "Environment activation verification failed"
@@ -232,12 +233,12 @@ fi
 log_info "Performing final validation..."
 
 # Validate Python environment
-validate_env ".venv" || handle_error ${LINENO} "Python environment validation failed"
+# validate_env ".venv" || handle_error ${LINENO} "Python environment validation failed"
 
 # Validate R environment
 validate_env ".renv" || handle_error ${LINENO} "R environment validation failed"
 
 # Final success message
 log_success "Setup completed successfully!"
-log_info "You can now activate the Python environment with: conda activate $(pwd)/.venv"
+# log_info "You can now activate the Python environment with: conda activate $(pwd)/.venv"
 log_info "Or the R environment with: conda activate $(pwd)/.renv"
