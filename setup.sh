@@ -61,11 +61,13 @@ validate_env() {
 # Function to check if conda is initialized
 check_conda_init() {
     log_info "Checking conda initialization..."
+
     # Check if conda command exists in path
     if ! command -v conda &> /dev/null; then
         log_warning "Conda command not found in PATH"
         return 1
     fi
+
     # Check if conda is initialized in current shell
     if ! conda info --envs &> /dev/null; then
         log_warning "Conda exists but is not properly initialized"
@@ -78,10 +80,12 @@ check_conda_init() {
 # Function to initialize conda in the current shell
 initialize_conda() {
     log_info "Initializing conda for current shell..."
+
     # Ensure conda is in PATH
     if [[ ! ":$PATH:" == *":$HOME/miniconda/bin:"* ]]; then
         export PATH="$HOME/miniconda/bin:$PATH"
     fi
+
     # Initialize conda for current shell session
     if [ -f "$HOME/miniconda/etc/profile.d/conda.sh" ]; then
         log_info "Sourcing conda.sh..."
@@ -90,18 +94,54 @@ initialize_conda() {
         log_warning "conda.sh not found, trying alternative initialization..."
         eval "$(conda shell.bash hook)" || handle_error ${LINENO} "Failed to set up conda shell hooks"
     fi
+
     # Initialize conda for future shell sessions
     conda init bash || handle_error ${LINENO} "Failed to initialize conda for bash"
+
     # Reload shell configuration
     if [ -f ~/.bashrc ]; then
         log_info "Reloading shell configuration..."
         . ~/.bashrc
     fi
+
     # Verify initialization
     if ! conda info --envs &> /dev/null; then
         handle_error ${LINENO} "Conda initialization failed verification"
     fi
     log_success "Conda initialized successfully"
+}
+
+# Function to check and configure conda channels
+configure_conda_channels() {
+    log_info "Checking conda channels..."
+    channels=$(conda config --show channels)
+    
+    # Check if conda-forge channel is already configured
+    if [[ "$channels" != *"conda-forge"* ]]; then
+        log_info "Adding conda-forge channel"
+        conda config --add channels conda-forge
+    fi
+
+    # Check if bioconda channel is already configured
+    if [[ "$channels" != *"bioconda"* ]]; then
+        log_info "Adding bioconda channel"
+        conda config --add channels bioconda
+    fi
+
+    # Check if defaults channel is already configured
+    if [[ "$channels" != *"defaults"* ]]; then
+        log_info "Adding defaults channel"
+        conda config --add channels defaults
+    fi
+
+    # Check if nodefaults channel is already configured
+    if [[ "$channels" != *"nodefaults"* ]]; then
+        log_info "Adding nodefaults configuration"
+        conda config --set channel_priority strict
+        conda config --add channels nodefaults
+    fi
+
+    log_success "Conda channels configured successfully"
 }
 
 # Check prerequisites
@@ -142,6 +182,9 @@ if ! command -v conda &> /dev/null; then
     rm miniconda.sh
     initialize_conda
 fi
+
+# Configure conda channels
+configure_conda_channels
 
 # Ensure conda is initialized
 if ! check_conda_init; then
