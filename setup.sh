@@ -208,7 +208,7 @@ setup_env() {
 
 # Set up R environment
 log_info "Setting up R environment..."
-setup_env ".renv" "r-base" "4.3.1" r-essentials r-tidyverse r-quarto
+setup_env ".renv" "r-base" "4.4.1" r-essentials r-tidyverse r-quarto
 Rscript setup.R || handle_error ${LINENO} "Failed to install R packages"
 conda deactivate || handle_error ${LINENO} "Failed to deactivate Miniconda"
 
