@@ -6,7 +6,6 @@ requirements.txt
 pyproject.toml
 
 # R environments
-renv/
 .renv/
 *.Rhistory
 *.Rproj
