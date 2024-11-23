@@ -83,10 +83,10 @@ dim_and_down <- function(suffix, secTitle = "Dimensions & Download") {
 theme_ui_details <- function(suffix, secTitle = "Details", pal = TRUE, them = TRUE, ptsz = FALSE, alpha = FALSE, addList = NULL) {
   elementList <- list(width = 12, h4(secTitle))
   if (pal) {
-    elementList <- c(elementList, list(div(class = "col-md-4", uipal(paste0("pal", suffix)))))
+    elementList <- c(elementList, list(div(class = "col-md-3", uipal(paste0("pal", suffix)))))
   }
   if (them) {
-    elementList <- c(elementList, list(div(class = "col-md-4", uitheme(paste0("theme", suffix)))))
+    elementList <- c(elementList, list(div(class = "col-md-3", uitheme(paste0("theme", suffix)))))
   }
   if (ptsz) {
     elementList <- c(elementList, list(div(class = "col-md-3", uiptsz(paste0("size", suffix), class = "col-md-12"))))
@@ -136,15 +136,15 @@ make_fluidpage <- function(fptitle = "", sbp, outplotid, markdownDoc = "") {
 ## Load panels UIs
 source("panels/panel_ui_data.R", local = TRUE)
 source("panels/panel_ui_filter.R", local = TRUE)
-source("panels/panel_ui_richness.R", local = TRUE)
-source("panels/panel_ui_net.R", local = TRUE)
-source("panels/panel_ui_d3.R", local = TRUE)
-source("panels/panel_ui_ordination.R", local = TRUE)
-source("panels/panel_ui_heatmap.R", local = TRUE)
-source("panels/panel_ui_scatter.R", local = TRUE)
 source("panels/panel_ui_bar.R", local = TRUE)
-source("panels/panel_ui_palette.R", local = TRUE)
-source("panels/panel_ui_provenance.R", local = TRUE)
+source("panels/panel_ui_richness.R", local = TRUE)
+source("panels/panel_ui_ordination.R", local = TRUE)
+#source("panels/panel_ui_net.R", local = TRUE)
+#source("panels/panel_ui_d3.R", local = TRUE)
+#source("panels/panel_ui_heatmap.R", local = TRUE)
+#source("panels/panel_ui_scatter.R", local = TRUE)
+#source("panels/panel_ui_palette.R", local = TRUE)
+#source("panels/panel_ui_provenance.R", local = TRUE)
 
 # Transform panel is only documentation
 transpage <- fluidPage(
@@ -182,16 +182,16 @@ ui <- navbarPage(
   theme = my_theme,
   tabPanel("Select Dataset", datapage),
   tabPanel("Filter", filterpage),
-  tabPanel("Alpha Diversity", richpage),
-  tabPanel("Network", netpage),
-  tabPanel("d3Network", d3netpage),
-  tabPanel("Ordination", ordpage),
-  tabPanel("Heatmap", heatpage),
-  tabPanel("Scatter", scatpage),
   tabPanel("Bar", barpage),
-  tabPanel("Palette", palpage),
-  tabPanel("Transform", transpage),
-  tabPanel("Provenance", provpage),
+  tabPanel("Alpha Diversity", richpage),
+  tabPanel("Ordination", ordpage),
+  #tabPanel("Network", netpage),
+  #tabPanel("d3Network", d3netpage),
+  #tabPanel("Heatmap", heatpage),
+  #tabPanel("Scatter", scatpage),
+  #tabPanel("Palette", palpage),
+  #tabPanel("Transform", transpage),
+  #tabPanel("Provenance", provpage),
   header = headerTagList,
   collapsible = TRUE,
   windowTitle = "Shiny-phyloseq"

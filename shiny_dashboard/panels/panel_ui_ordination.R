@@ -37,6 +37,7 @@ sbp_ord <- sidebarPanel(
     div(class = "col-md-4", uiOutput("ord_uix_facetrow")),
   )),
   fluidRow(column(
+    width = 12,
     div(class = "col-md-4", uiOutput("ord_uix_facetcol")),
     div(class = "col-md-4", uiOutput("ord_uix_label")),
     div(class = "col-md-2",
