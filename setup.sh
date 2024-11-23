@@ -176,6 +176,23 @@ if ! command -v conda &> /dev/null; then
     initialize_conda
 fi
 
+# Install Quarto
+log_info "Setting up Quarto..."
+if ! command -v quarto &> /dev/null; then
+    log_info "Downloading and installing Quarto..."
+    wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.3.450/quarto-1.3.450-linux-amd64.deb || \
+        handle_error ${LINENO} "Failed to download Quarto"
+    sudo dpkg -i quarto-1.3.450-linux-amd64.deb || \
+        handle_error ${LINENO} "Failed to install Quarto"
+    sudo apt-get install -f -y || \
+        handle_error ${LINENO} "Failed to install Quarto dependencies"
+    rm quarto-1.3.450-linux-amd64.deb
+    # Verify installation
+    quarto --version || handle_error ${LINENO} "Failed to verify Quarto installation"
+else
+    log_info "Quarto is already installed"
+fi
+
 # Configure conda channels
 configure_conda_channels
 
@@ -247,23 +264,6 @@ log_info "Setting up R environment..."
 setup_env ".renv" "r-base" "4.4.1" r-essentials r-tidyverse r-quarto
 Rscript setup.R || handle_error ${LINENO} "Failed to install R packages"
 conda deactivate || handle_error ${LINENO} "Failed to deactivate Miniconda"
-
-# Install Quarto
-log_info "Setting up Quarto..."
-if ! command -v quarto &> /dev/null; then
-    log_info "Downloading and installing Quarto..."
-    wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.3.450/quarto-1.3.450-linux-amd64.deb || \
-        handle_error ${LINENO} "Failed to download Quarto"
-    sudo dpkg -i quarto-1.3.450-linux-amd64.deb || \
-        handle_error ${LINENO} "Failed to install Quarto"
-    sudo apt-get install -f -y || \
-        handle_error ${LINENO} "Failed to install Quarto dependencies"
-    rm quarto-1.3.450-linux-amd64.deb
-    # Verify installation
-    quarto --version || handle_error ${LINENO} "Failed to verify Quarto installation"
-else
-    log_info "Quarto is already installed"
-fi
 
 # Final Validation
 log_info "Performing final validation..."

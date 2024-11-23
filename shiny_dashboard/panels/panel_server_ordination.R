@@ -11,7 +11,7 @@ get_type_vars <- reactive({
 
 ## Define the UIX color
 output$ord_uix_color <- renderUI({
-  selectInput(inpudId = "color_ord",
+  selectInput(inputId = "color_ord",
               label = "Color",
               choices = vars(get_type_vars()),
               selected = "NULL")
@@ -19,7 +19,7 @@ output$ord_uix_color <- renderUI({
 
 ## Define the UIX shape
 output$ord_uix_shape <- renderUI({
-  selectInput(inpudId = "shape_ord",
+  selectInput(inputId = "shape_ord",
               label = "Shape",
               choices = vars(get_type_vars()),
               selected = "NULL")
@@ -27,7 +27,7 @@ output$ord_uix_shape <- renderUI({
 
 ## Define the UIX constraint
 output$ord_uix_constraint <- renderUI({
-  selectInput(inpudId = "constraint_ord",
+  selectInput(inputId = "constraint_ord",
               label = "Constraint",
               choices = vars(get_type_vars()),
               selected = "NULL",
@@ -36,7 +36,7 @@ output$ord_uix_constraint <- renderUI({
 
 ## Define the UIX facetrow
 output$ord_uix_facetrow <- renderUI({
-  selectInput(inpudId = "facetrow_ord",
+  selectInput(inputId = "facetrow_ord",
               label = "Facet Row",
               choices = vars(get_type_vars()),
               selected = "NULL",
@@ -45,7 +45,7 @@ output$ord_uix_facetrow <- renderUI({
 
 ## Define the UIX facetcol
 output$ord_uix_facetcol <- renderUI({
-  selectInput(inpudId = "facetcol_ord",
+  selectInput(inputId = "facetcol_ord",
               label = "Facet Col",
               choices = vars(get_type_vars()),
               selected = "NULL",
@@ -54,7 +54,7 @@ output$ord_uix_facetcol <- renderUI({
 
 ## Define the UIX label
 output$ord_uix_label <- renderUI({
-  selectInput(inpudId = "label_ord",
+  selectInput(inputId = "label_ord",
               label = "Label",
               choices = vars(get_type_vars()),
               selected = "NULL")
@@ -63,11 +63,11 @@ output$ord_uix_label <- renderUI({
 ## Define the UIX distance
 output$ord_uix_dist <- renderUI({
   if (input$ord_method %in% c("DCA", "CCA", "RDA", "DPCoA")) {
-    return(selectInput(inpudId = "dist_ord",
+    return(selectInput(inputId = "dist_ord",
                        label = tags$del("Distance"),
                        selected = "NULL"))
   }
-  return(selectInput(inpudId = "dist_ord",
+  return(selectInput(inputId = "dist_ord",
                      label = "Distance",
                      choices = distlist,
                      selected = "bray"))

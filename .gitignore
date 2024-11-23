@@ -16,3 +16,5 @@ pyproject.toml
 README.pdf
 dockerfile
 quarto_dashboard/
+.Rproj.user
+Actividades.md

@@ -8,8 +8,8 @@ This README provides instructions for setting up the development environment for
 3. [Manual Setup](#manual-setup)
    - [Clone the Repository](#clone-the-repository)
    - [Conda Installation](#conda-installation)
-   - [R Environment Setup](#r-environment-setup)
    - [Quarto Installation](#quarto-installation)
+   - [R Environment Setup](#r-environment-setup)
 4. [Troubleshooting](#troubleshooting)
 
 ## Prerequisites
@@ -48,14 +48,6 @@ wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda
 source $HOME/miniconda/bin/activate
 ```
-### R Environment Setup
-
-```bash
-conda env create -f environment.yml --prefix .renv
-conda activate .renv
-Rscript setup.R
-conda deactivate
-```
 
 ### Quarto Installation
 
@@ -65,6 +57,15 @@ For Debian/Ubuntu systems, you can install Quarto using the binary package:
 wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.3.450/quarto-1.3.450-linux-amd64.deb
 sudo dpkg -i quarto-1.3.450-linux-amd64.deb
 sudo apt-get install -f
+```
+
+### R Environment Setup
+
+```bash
+conda env create -f environment.yml --prefix .renv
+conda activate .renv
+Rscript setup.R
+conda deactivate
 ```
 
 For other systems or for the latest version, please refer to the [official Quarto documentation](https://quarto.org/docs/get-started/).

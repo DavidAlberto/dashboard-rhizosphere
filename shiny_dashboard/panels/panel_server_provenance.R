@@ -80,7 +80,7 @@ event_code <- reactive({
                                   function(x) {
                                     paste0("# Event: input$* assignment/replacement \n",
                                            paste(x$id, "<-", convert_input_lines_value(x$value)))
-                                  }, simplify = FALSE
+                                  }, simplify = FALSE)
   # 3. Process all code executions.
   ctxlogs <- which(sapply(eventlog, function(x){x$action=="ctx"}))
   # Omit provenance reactive (if present)
@@ -114,13 +114,13 @@ output$provenance <- renderUI({
   }
   # Write a small subset of the most-recent code to the main panel, as HTML
   x <- knitr::knit2html(fragment.only = TRUE,
-                        text = c("<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?lang=r&skin=sunburst"></script>",
+                        text = c("<script src='https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?lang=r&skin=sunburst'></script>",
                          paste("### Preview Last", input$number_events_prov, "Events"),
                          "```{r last-3-chunks, echo=TRUE, eval=FALSE}",
                          tail(event_code(), input$number_events_prov),
                          "```")
   )
-  x <- gsub("<pre>", "<pre class="prettyprint">", x, fixed = TRUE)
+  x <- gsub("<pre>", "<pre class='prettyprint'>", x, fixed = TRUE)
   return(HTML(x))
 })
 
