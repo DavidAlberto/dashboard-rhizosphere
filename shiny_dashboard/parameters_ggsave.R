@@ -9,21 +9,21 @@ OTUSumDefault <- 10                          # Threshold for OTU sums filtering
 kovera_A <- 0                                # 'A' parameter for KOverA filtering
 kovera_k <- 0                                # 'k' parameter for KOverA filtering
 
-## Network Default Parameters
-netdist <- 0.6                               # Maximum distance for network structure
-animation_steps <- 20                        # Number of steps to include in an animation
-default_netLabel <- "NULL"                   # Network label
-netThreshColorVariableDefault <- "DIAGNOSIS" # Color var for network threshold
-netThreshShapeVariableDefault <- "SEX"       # Shape var for network threshold
-netThreshDistanceMethod <- "bray"            # Distance method for network threshold
-
-## d3 Network Default Parameters
-LinkDistThreshold <- 0.4                     # Link distance threshold for d3 network
-d3DefaultLinkScaleFactor <- 40               # Link scale factor for d3 network
-d3DefaultDistance <- "bray"                  # Distance method for d3 network
-d3NetworkColorVar <- "Family"                # Color variable for d3 network
-d3NodeLabelVar <- c("Phylum", "Order",       # Node label variables for d3 network
-                    "Class", "Family", "OTU")
+# ## Network Default Parameters
+# netdist <- 0.6                               # Maximum distance for network structure
+# animation_steps <- 20                        # Number of steps to include in an animation
+# default_netLabel <- "NULL"                   # Network label
+# netThreshColorVariableDefault <- "DIAGNOSIS" # Color var for network threshold
+# netThreshShapeVariableDefault <- "SEX"       # Shape var for network threshold
+# netThreshDistanceMethod <- "bray"            # Distance method for network threshold
+# 
+# ## d3 Network Default Parameters
+# LinkDistThreshold <- 0.4                     # Link distance threshold for d3 network
+# d3DefaultLinkScaleFactor <- 40               # Link scale factor for d3 network
+# d3DefaultDistance <- "bray"                  # Distance method for d3 network
+# d3NetworkColorVar <- "Family"                # Color variable for d3 network
+# d3NodeLabelVar <- c("Phylum", "Order",       # Node label variables for d3 network
+#                     "Class", "Family", "OTU")
 
 # Function ggsave custom
 ## Supported download format labels

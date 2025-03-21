@@ -77,11 +77,11 @@ output$ord_uix_dist <- renderUI({
 physeq_ord <- reactive({
   return(
     switch({input$transform_ord},
-      Counts = physeq(),
-      Prop = physeqProp(),
-      RLog = physeqRLog(),
-      CLR = physeqCLR(),
-      physeq()
+           Counts = physeq(),
+           Prop = physeqProp(),
+           RLog = physeqRLog(),
+           CLR = physeqCLR(),
+           physeq()
     )
   )
 })

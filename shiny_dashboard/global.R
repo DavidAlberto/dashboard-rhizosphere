@@ -4,21 +4,11 @@ source("parameters_ggsave.R", local = TRUE)
 
 # Load datasets
 env_psdata <- new.env()
-data(list = c("GlobalPatterns", "enterotype", "esophagus"), envir = env_psdata)
-load("data/kostic.RData", envir = env_psdata)
-load("data/1457_uparse.RData", envir = env_psdata)
-load("data/agave.RData", envir = env_psdata)
+load("data/biom_srhizosphere.RData", envir = env_psdata) 
 attach(env_psdata)
 
-## Define initial list of available datasets
-datalist <- list(
-  closed_1457_uparse = closed_1457_uparse,
-  study_1457_Kostic = kostic,
-  GlobalPatterns = GlobalPatterns,
-  enterotype = enterotype,
-  esophagus = esophagus,
-  Agave = agave
-)
+# Get phyloseq data
+get_phyloseq_data <- rhizo
 
 # Utility functions
 ## For pasting times into things
@@ -125,7 +115,7 @@ get_facet_grid <- function(facetrow=NULL, facetcol=NULL) {
     formstring = paste(paste(facetrow, collapse = "+"), "~", ".")
   } else {
     formstring <- paste(paste(facetrow, collapse = "+"), "~",
-                  paste(facetcol, collapse = "+"))
+                        paste(facetcol, collapse = "+"))
   }
   return(as.formula(formstring))
 }
@@ -151,7 +141,7 @@ tablify_phyloseq_component <- function(component, colmax = 25L) {
 component_options <- function(physeq) {
   component_option_list <- list("NULL" = "NULL")
   nonEmpty <- as.logical(sapply(slotNames(physeq),
-                     function(x, ps) { !is.null(access(ps, x)) }, ps = physeq))
+                                function(x, ps) { !is.null(access(ps, x)) }, ps = physeq))
   if (sum(nonEmpty) < 1) { return(NULL) }
   nonEmpty <- names(nonEmpty)[nonEmpty]
   nonEmpty <- nonEmpty[!nonEmpty %in% c("phy_tree", "refseq")]

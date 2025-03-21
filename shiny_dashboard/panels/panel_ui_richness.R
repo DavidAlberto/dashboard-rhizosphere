@@ -28,39 +28,39 @@ sbp_rich <- sidebarPanel(
   )),
   h4("Details"),
   fluidRow(column(width = 12,
-                  div(class = "col-md-4", uipal("pal_rich")),
-                  div(class = "col-md-4", uitheme("theme_rich")),
-                  div(class = "col-md-2", uiptsz("size_rich", class = "col-md-12")),
-                  div(class = "col-md-2", uialpha("alpha_rich", class = "col-md-12")))),
+                  div(class = "col-md-3", uipal("pal_rich")),
+                  div(class = "col-md-3", uitheme("theme_rich")),
+                  div(class = "col-md-3", uiptsz("size_rich", class = "col-md-12")),
+                  div(class = "col-md-3", uialpha("alpha_rich", class = "col-md-12")))),
   fluidRow(column(width = 12,
                   div(class = "col-md-4",
-                    numericInputRow(inputId = "label_max_rich",
-                                    label = "Max. Labels",
-                                    value = 30L, min = 0L,
-                                    step = 1L, class = "col-md-12")),
+                      numericInputRow(inputId = "label_max_rich",
+                                      label = "Max. Labels",
+                                      value = 30L, min = 0L,
+                                      step = 1L, class = "col-md-12")),
                   div(class = "col-md-4",
-                    numericInputRow(inputId = "x_axis_angle_rich",
-                                    label = "Angle",
-                                    value = 90, min = 0, max = 360,
-                                    step = 45, class = "col-md-12")),
+                      numericInputRow(inputId = "x_axis_angle_rich",
+                                      label = "Angle",
+                                      value = 90, min = 0, max = 360,
+                                      step = 45, class = "col-md-12")),
                   div(class = "col-md-4",
-                    radioButtons(inputId = "uicttype_rich",
-                                 label = "Source Data",
-                                 choices = c("Original", "Filtered"),
-                                 selected = "Original",
-                                 inline = TRUE))
-                  )),
+                      radioButtons(inputId = "uicttype_rich",
+                                   label = "Source Data",
+                                   choices = c("Original", "Filtered"),
+                                   selected = "Original",
+                                   inline = TRUE))
+  )),
   dim_and_down("_rich")
 )
 
 ## Richness Server
 richpage <- fluidPage(theme = shinytheme("cosmo"),
-  headerPanel("Alpha Diversity Estimates", "windowTitle"),
-  fluidRow(
-    sbp_rich,
-    column(width = 8, plotOutput("richness"), offset = 0)
-  ),
-  fluidRow(
-    column(width = 12, includeMarkdown("panels/paneldoc/richness.md"))
-  )
+                      headerPanel("Alpha Diversity Estimates", "windowTitle"),
+                      fluidRow(
+                        sbp_rich,
+                        column(width = 8, plotOutput("richness"), offset = 0)
+                      ),
+                      fluidRow(
+                        column(width = 12, includeMarkdown("panels/paneldoc/richness.md"))
+                      )
 )

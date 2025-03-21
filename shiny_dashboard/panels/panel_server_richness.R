@@ -34,7 +34,7 @@ output$rich_uix_label <- renderUI({
 # Alpha Diversity plot definition
 physeq_rich <- reactive({
   return(switch(input$uicttype_rich,
-                Original = get_phyloseq_data(),
+                Original = rhizo,
                 Filtered = physeq()))
 })
 
@@ -96,7 +96,7 @@ finalize_richness_plot <- reactive({
 # Render plot and downloadable file
 output$richness <- renderPlot({
   shiny_phyloseq_print(finalize_richness_plot())
-  },
+},
 width = function() {72 * input$width_rich},
 height = function() {72 * input$height_rich}
 )

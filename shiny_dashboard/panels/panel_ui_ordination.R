@@ -20,14 +20,14 @@ sbp_ord <- sidebarPanel(
   )),
   fluidRow(column(
     width = 12,
-    div(class = "col-md-4", selectInput(inputId = "transform_ord",
+    div(class = "col-md-3", selectInput(inputId = "transform_ord",
                                         label = "Transform",
                                         choices = c("Counts", "Prop",
                                                     "RLog", "CLR"))),
-    div(class = "col-md-4", uiOutput("ord_uix_constraint")),
-    div(class = "col-md-2", numericInputRow("axis_x_ord", "AesMap X", 1L, 1L,
+    div(class = "col-md-3", uiOutput("ord_uix_constraint")),
+    div(class = "col-md-3", numericInputRow("axis_x_ord", "AesMap X", 1L, 1L,
                                             step = 1L, class = "col-md-12")),
-    div(class = "col-md-2", numericInputRow("axis_y_ord", "AesMap Y", 2L, 1L,
+    div(class = "col-md-3", numericInputRow("axis_y_ord", "AesMap Y", 2L, 1L,
                                             step = 1L, class = "col-md-12"))
   )),
   fluidRow(column(
@@ -38,13 +38,13 @@ sbp_ord <- sidebarPanel(
   )),
   fluidRow(column(
     width = 12,
-    div(class = "col-md-4", uiOutput("ord_uix_facetcol")),
-    div(class = "col-md-4", uiOutput("ord_uix_label")),
-    div(class = "col-md-2",
+    div(class = "col-md-3", uiOutput("ord_uix_facetcol")),
+    div(class = "col-md-3", uiOutput("ord_uix_label")),
+    div(class = "col-md-3",
         numericInputRow(inputId = "label_size_ord",
                         label = "Lab Sz", value = 3, min = 0.5,
                         step = 0.5, class = "col-md-12")),
-    div(class = "col-md-2",
+    div(class = "col-md-3",
         numericInputRow(inputId = "label_vjust_ord", label = "V-Just",
                         value = 2, min = 0, class = "col-md-12"))
   )),
@@ -54,10 +54,10 @@ sbp_ord <- sidebarPanel(
 
 ## Ordination Server
 ordpage <- fluidPage(theme = shinytheme("cosmo"),
-  headerPanel("Ordination Plot"),
-  fluidRow(sbp_ord,
-           column(width = 8, div(class = "col-md-12", plotOutput("ordination")),
-                  div(class = "col-md-12", br()))),
-  fluidRow(column(width = 12, includeMarkdown("panels/paneldoc/ordination.md")
-  ))
+                     headerPanel("Ordination Plot"),
+                     fluidRow(sbp_ord,
+                              column(width = 8, div(class = "col-md-12", plotOutput("ordination")),
+                                     div(class = "col-md-12", br()))),
+                     fluidRow(column(width = 12, includeMarkdown("panels/paneldoc/ordination.md")
+                     ))
 )
