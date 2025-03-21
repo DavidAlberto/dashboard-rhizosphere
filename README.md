@@ -53,7 +53,6 @@ source $HOME/miniconda/bin/activate
 ### R Environment Setup
 
 ```bash
-conda env create -f "$ENV_YAML" --force -p "$CONDA_ENV_PATH"
 conda env create -f environment.yml --prefix .renv
 conda activate .renv
 Rscript setup.R
