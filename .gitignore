@@ -1,9 +1,5 @@
 # Python environments
-.venv/
 *.conda
-*.yml
-requirements.txt
-pyproject.toml
 
 # R environments
 .renv/
@@ -11,10 +7,3 @@ pyproject.toml
 *.Rproj
 *.Rproj.user/
 *.Rprofile
-
-# Others
-README.pdf
-dockerfile
-quarto_dashboard/
-.Rproj.user
-Actividades.md

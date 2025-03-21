@@ -1,0 +1,8 @@
+name: .renv
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - r-base=4.4.0
+  - conda-forge::r-essentials
