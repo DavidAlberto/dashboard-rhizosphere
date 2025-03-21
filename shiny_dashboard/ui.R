@@ -45,7 +45,7 @@ uipal <- function(id, default = "Set1") {
               selected = default)
 }
 
-## Plot theme
+# Plot theme
 uitheme <- function(id, default="bl_wh"){
   selectInput(inputId = id,
               label = "Theme",
@@ -83,16 +83,22 @@ dim_and_down <- function(suffix, secTitle = "Dimensions & Download") {
 theme_ui_details <- function(suffix, secTitle = "Details", pal = TRUE, them = TRUE, ptsz = FALSE, alpha = FALSE, addList = NULL) {
   elementList <- list(width = 12, h4(secTitle))
   if (pal) {
-    elementList <- c(elementList, list(div(class = "col-md-3", uipal(paste0("pal", suffix)))))
+    elementList <- c(elementList, list(div(class = "col-md-3",
+                                           uipal(paste0("pal", suffix)))))
   }
   if (them) {
-    elementList <- c(elementList, list(div(class = "col-md-3", uitheme(paste0("theme", suffix)))))
+    elementList <- c(elementList, list(div(class = "col-md-3",
+                                           uitheme(paste0("theme", suffix)))))
   }
   if (ptsz) {
-    elementList <- c(elementList, list(div(class = "col-md-3", uiptsz(paste0("size", suffix), class = "col-md-12"))))
+    elementList <- c(elementList, list(div(class = "col-md-3",
+                                           uiptsz(paste0("size", suffix),
+                                                  class = "col-md-12"))))
   }
   if (alpha) {
-    elementList <- c(elementList, list(div(class = "col-md-3", uialpha(paste0("alpha", suffix), class = "col-md-12"))))
+    elementList <- c(elementList, list(div(class = "col-md-3",
+                                           uialpha(paste0("alpha", suffix),
+                                                   class = "col-md-12"))))
   }
   elementList <- c(elementList, addList)
   return(fluidRow(do.call("column", args = elementList)))
@@ -134,7 +140,7 @@ make_fluidpage <- function(fptitle = "", sbp, outplotid, markdownDoc = "") {
 }
 
 ## Load panels UIs
-source("panels/panel_ui_data.R", local = TRUE)
+# source("panels/panel_ui_data.R", local = TRUE)
 source("panels/panel_ui_filter.R", local = TRUE)
 source("panels/panel_ui_bar.R", local = TRUE)
 source("panels/panel_ui_richness.R", local = TRUE)
@@ -177,10 +183,8 @@ my_theme <- bs_theme(
 
 # Principal UI function
 ui <- navbarPage(
-  title = h4(a(href = "http://joey711.github.io/shiny-phyloseq/",
-               style = "color:#F0F0F0", "Shiny-phyloseq")),
-  theme = my_theme,
-  tabPanel("Select Dataset", datapage),
+  title = "Rhizosphere Metagenomics Analysis",
+  # tabPanel("Select Dataset", datapage),
   tabPanel("Filter", filterpage),
   tabPanel("Bar", barpage),
   tabPanel("Alpha Diversity", richpage),
@@ -194,6 +198,6 @@ ui <- navbarPage(
   #tabPanel("Provenance", provpage),
   header = headerTagList,
   collapsible = TRUE,
-  windowTitle = "Shiny-phyloseq"
+  windowTitle = "Rhizosphere Metagenomics Analysis"
 )
 shinyUI(ui)

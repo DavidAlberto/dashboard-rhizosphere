@@ -3,7 +3,7 @@
 output$filter_uix_subset_taxa_ranks <- renderUI({
   rankNames <- list("NULL" = "NULL")
   rankNames <- c(rankNames,
-                 as.list(rank_names(get_phyloseq_data(), errorIfNULL = FALSE)))
+                 as.list(rank_names(rhizo, errorIfNULL = FALSE)))
   rankNames <- c(rankNames, list(OTU = "OTU"))
   return(
     selectInput(inputId = "filter_rank",
@@ -18,10 +18,10 @@ output$filter_uix_subset_taxa_select <- renderUI({
   rank_list <- list("NULL" = "NULL")
   if (!is.null(av(input$filter_rank))) {
     if (input$filter_rank == "OTU") {
-      rank_list <- c(rank_list, as.list(taxa_names(get_phyloseq_data())))
+      rank_list <- c(rank_list, as.list(taxa_names(rhizo)))
     } else {
       rank_list <- c(rank_list,
-                     as.list(get_taxa_unique(get_phyloseq_data(),
+                     as.list(get_taxa_unique(rhizo,
                                              input$filter_rank)))
     }
   }
@@ -38,7 +38,7 @@ output$filter_uix_subset_taxa_select <- renderUI({
 output$filter_uix_subset_sample_vars <- renderUI({
   sampVars <- list("NULL" = "NULL")
   sampVars <- c(sampVars,
-                as.list(sample_variables(get_phyloseq_data(),
+                as.list(sample_variables(rhizo,
                                          errorIfNULL = FALSE)))
   sampVars <- c(sampVars, list(Sample = "Sample"))
   return(
@@ -55,10 +55,10 @@ output$filter_uix_subset_sample_select <- renderUI({
   varLevels <- list("NULL" = "NULL")
   if (!is.null(av(input$filter_samvars))) {
     if (input$filter_samvars == "Sample") {
-      varLevels <- c(varLevels, as.list(sample_names(get_phyloseq_data())))
+      varLevels <- c(varLevels, as.list(sample_names(rhizo)))
     } else {
-      if (!is.null(sample_variables(get_phyloseq_data(), FALSE))) {
-        varvec <- get_variable(get_phyloseq_data(), input$filter_samvars)
+      if (!is.null(sample_variables(rhizo, FALSE))) {
+        varvec <- get_variable(rhizo, input$filter_samvars)
         if (plyr::is.discrete(varvec))
           varLevels <- c(varLevels, as.list(unique(as(varvec, "character"))))
       }
@@ -75,7 +75,7 @@ output$filter_uix_subset_sample_select <- renderUI({
 
 ## The main reactive data object. Returns a phyloseq-class instance.
 physeq <- reactive({
-  ps0 <- get_phyloseq_data()
+  ps0 <- rhizo
   if (input$actionb_filter == 0) {
     if (inherits(ps0, "phyloseq")) {
       return(ps0)
@@ -190,8 +190,8 @@ physeqCLR <- reactive({
 ## Misc Filter-tab server code
 ### kOverA `k` Filter
 maxSamples <- reactive({
-  if (inherits(get_phyloseq_data(), "phyloseq")) {
-    return(nsamples(get_phyloseq_data()))
+  if (inherits(rhizo, "phyloseq")) {
+    return(nsamples(rhizo))
   } else {
     return(NULL)
   }
@@ -204,12 +204,12 @@ output$filter_ui_kOverA_k <- renderUI({
 
 ## Render contents of original data
 output$contents <- renderUI({
-  output_phyloseq_print_html(get_phyloseq_data())
+  output_phyloseq_print_html(rhizo)
 })
 
 ## Render contents of filtered data
 output$filtered_contents0 <- renderUI({
-  output_phyloseq_print_html(get_phyloseq_data())
+  output_phyloseq_print_html(rhizo)
 })
 
 ## Render contents of filtered data
@@ -234,26 +234,26 @@ sums_hist <- function(thesums = NULL, xlab = "", ylab = "") {
 lib_size_hist <- reactive({
   xlab <- "Number of Reads (Counts)"
   ylab <- "Number of Libraries"
-  return(sums_hist(sample_sums(get_phyloseq_data()), xlab, ylab))
+  return(sums_hist(sample_sums(rhizo), xlab, ylab))
 })
 
 ## Create marginal histograms for OTU totals
 otu_sum_hist <- reactive({
   xlab <- "Number of Reads (Counts)"
   ylab <- "Number of OTUs"
-  return(sums_hist(taxa_sums(get_phyloseq_data()), xlab, ylab))
+  return(sums_hist(taxa_sums(rhizo), xlab, ylab))
 })
 
 ## Create text output of sample variables
 output$sample_variables <- renderText({
-  return(paste0(sample_variables(get_phyloseq_data(),
+  return(paste0(sample_variables(rhizo,
                                  errorIfNULL = FALSE),
                 collapse = ", "))
 })
 
 ## Create text output of rank names
 output$rank_names <- renderText({
-  return(paste0(rank_names(get_phyloseq_data(),
+  return(paste0(rank_names(rhizo,
                            errorIfNULL = FALSE),
                 collapse = ", "))
 })

@@ -10,7 +10,7 @@ theme_set(theme_bw())
 shinyPhyloseqServerObjectsList <- ls()
 shinyServer(function(input, output) {
   ## Data and filtering panels
-  source("panels/panel_server_data.R", local = TRUE)
+  # source("panels/panel_server_data.R", local = TRUE)
   source("panels/panel_server_filter.R", local = TRUE)
   ## Reactive UI definition of variables
   rankNames <- reactive({

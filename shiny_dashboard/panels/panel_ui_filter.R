@@ -51,19 +51,19 @@ filterpage <- fluidPage(
         column(width = 6,
                p("Filtered Data"),
                htmlOutput("filtered_contents")
-      )),
+        )),
       h4("Component Table, Filtered Data"),
       fluidRow(column(width = 12,
-        div(class = "col-md-8", uiOutput("uix_available_components_filt")),
-        div(class = "col-md-3", numericInputRow(inputId = "component_table_colmax_filt",
-                                                label = "Max. Columns",
-                                                value = 25L, min = 1L,
-                                                step = 5L, class = "col-md-12"))
+                      div(class = "col-md-8", uiOutput("uix_available_components_filt")),
+                      div(class = "col-md-3", numericInputRow(inputId = "component_table_colmax_filt",
+                                                              label = "Max. Columns",
+                                                              value = 25L, min = 1L,
+                                                              step = 5L, class = "col-md-12"))
       )),
       dataTableOutput("physeqComponentTable")
     )
   ),
-  fluidRow(
-    column(width = 12, includeMarkdown("panels/paneldoc/filter.md"))
-  )
+  # fluidRow(
+  #   column(width = 12, includeMarkdown("panels/paneldoc/filter.md"))
+  # )
 )

@@ -3,14 +3,15 @@
 This README provides instructions for setting up the development environment for the Dashboard Rhizosphere Project, including Conda installation, creation of R environment and installation of packages.
 
 ## Table of Contents
-1. [Prerequisites](#prerequisites)
-2. [Quick Setup](#quick-setup)
-3. [Manual Setup](#manual-setup)
-   - [Clone the Repository](#clone-the-repository)
-   - [Conda Installation](#conda-installation)
-   - [Quarto Installation](#quarto-installation)
-   - [R Environment Setup](#r-environment-setup)
-4. [Troubleshooting](#troubleshooting)
+- [Dashboard Rhizosphere Project Setup Guide](#dashboard-rhizosphere-project-setup-guide)
+  - [Table of Contents](#table-of-contents)
+  - [Prerequisites](#prerequisites)
+  - [Quick Setup](#quick-setup)
+  - [Manual Setup](#manual-setup)
+    - [Clone the Repository](#clone-the-repository)
+    - [Conda Installation](#conda-installation)
+    - [R Environment Setup](#r-environment-setup)
+  - [Troubleshooting](#troubleshooting)
 
 ## Prerequisites
 
@@ -49,26 +50,15 @@ bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda
 source $HOME/miniconda/bin/activate
 ```
 
-### Quarto Installation
-
-For Debian/Ubuntu systems, you can install Quarto using the binary package:
-
-```bash
-wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.3.450/quarto-1.3.450-linux-amd64.deb
-sudo dpkg -i quarto-1.3.450-linux-amd64.deb
-sudo apt-get install -f
-```
-
 ### R Environment Setup
 
 ```bash
+conda env create -f "$ENV_YAML" --force -p "$CONDA_ENV_PATH"
 conda env create -f environment.yml --prefix .renv
 conda activate .renv
 Rscript setup.R
 conda deactivate
 ```
-
-For other systems or for the latest version, please refer to the [official Quarto documentation](https://quarto.org/docs/get-started/).
 
 ## Troubleshooting
 
