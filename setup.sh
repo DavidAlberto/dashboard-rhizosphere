@@ -74,13 +74,13 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ENV_YML="$SCRIPT_DIR/environment.yml"
 CONDA_ENV_PATH="$(pwd)/.renv"
 
-if [ ! -f "$ENV_YAML" ]; then
-    handle_error ${LINENO} "File '$ENV_YAML' not found. Please create it with the desired configuration."
+if [ ! -f "$ENV_YML" ]; then
+    handle_error ${LINENO} "File '$ENV_YML' not found. Please create it with the desired configuration."
 fi
 
-log_info "Creating (or recreating) the conda environment from '$ENV_YAML'..."
+log_info "Creating (or recreating) the conda environment from '$ENV_YML'..."
 conda env remove -p "$CONDA_ENV_PATH" -y &> /dev/null || true
-conda env create -f "$ENV_YAML" --force -p "$CONDA_ENV_PATH" || \
+conda env create -f "$ENV_YML" --force -p "$CONDA_ENV_PATH" || \
     handle_error ${LINENO} "Error creating the conda environment"
 
 # Activate conda environment
