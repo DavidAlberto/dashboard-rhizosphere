@@ -6,4 +6,4 @@
 *.Rhistory
 *.Rproj
 *.Rproj.user/
-*.Rprofile
+.Rprofile

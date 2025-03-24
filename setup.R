@@ -1,5 +1,6 @@
 # Set CRAN repository
 options(repos = c(CRAN = "https://cran.rstudio.com/"))
+options(browser = "firefox")
 
 # Check R version
 r_min_version <- "4.3.0"
@@ -15,3 +16,6 @@ if (!requireNamespace("renv", quietly = TRUE)) {
 
 # Restore the environment from renv.lock
 renv::restore()
+
+# Snapshot the environment
+renv::snapshot()
