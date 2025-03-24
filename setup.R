@@ -18,4 +18,4 @@ if (!requireNamespace("renv", quietly = TRUE)) {
 renv::restore()
 
 # Snapshot the environment
-renv::snapshot()
+renv::snapshot(lockfile = "renv.lock", update = TRUE)
