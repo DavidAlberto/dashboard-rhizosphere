@@ -1,6 +1,6 @@
 # Bar Panel UI
-## Bar_plot sbp definition
-sbp_bar <- sidebarPanel(
+## Bar_plot
+barpage <- sidebarPanel(
   actionButton("actionb_bar", "(Re)Build Graphic", icon("refresh")),
   h4("Aesthetic Mapping"),
   fluidRow(column(width = 12,
@@ -30,7 +30,7 @@ sbp_bar <- sidebarPanel(
 )
 
 ## Bar_plot Server
-barpage <- make_fluidpage(fptitle = "Flexible Bar Plot",
-                          sbp = sbp_bar,
-                          outplotid = "bar",
-                          markdownDoc = "bar.md")
+# barpage <- make_fluidpage(fptitle = "Flexible Bar Plot",
+#                           sbp = sbp_bar,
+#                           outplotid = "bar",
+#                           markdownDoc = "bar.md")

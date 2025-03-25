@@ -29,7 +29,7 @@ if (!requireNamespace("renv", quietly = TRUE)) {
 }
 
 # Initialize the environment with renv (this creates the project and initial settings)
-renv::init()
+# renv::init()
 
 # List of required packages
 required_packages <- c(
