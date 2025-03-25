@@ -1,6 +1,7 @@
 # Set CRAN repository
 options(repos = c(CRAN = "https://cran.rstudio.com/"))
 options(browser = "firefox")
+Sys.setenv(R_BROWSER = "firefox")
 
 # Check R version
 r_min_version <- "4.3.0"
