@@ -1,9 +1,2 @@
-# Python environments
-*.conda
-
-# R environments
+# R environment
 .renv/
-*.Rhistory
-*.Rproj
-*.Rproj.user/
-.Rprofile
