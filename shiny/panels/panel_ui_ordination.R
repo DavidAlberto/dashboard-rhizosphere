@@ -5,7 +5,7 @@ names(ordtypelist) <- c("Samples", "Species", "Biplot",
                         "Split Plot", "Scree Plot")
 
 ## Define the UIX display
-sbp_ord <- sidebarPanel(
+ordpage <- sidebarPanel(
   h4("Structure"),
   fluidRow(column(
     width = 12,
@@ -53,11 +53,11 @@ sbp_ord <- sidebarPanel(
 )
 
 ## Ordination Server
-ordpage <- fluidPage(theme = shinytheme("cosmo"),
-                     headerPanel("Ordination Plot"),
-                     fluidRow(sbp_ord,
-                              column(width = 8, div(class = "col-md-12", plotOutput("ordination")),
-                                     div(class = "col-md-12", br()))),
-                     fluidRow(column(width = 12, includeMarkdown("panels/paneldoc/ordination.md")
-                     ))
-)
+# ordpage <- fluidPage(theme = shinytheme("cosmo"),
+#                      headerPanel("Ordination Plot"),
+#                      fluidRow(sbp_ord,
+#                               column(width = 8, div(class = "col-md-12", plotOutput("ordination")),
+#                                      div(class = "col-md-12", br()))),
+#                      fluidRow(column(width = 12, includeMarkdown("panels/paneldoc/ordination.md")
+#                      ))
+# )

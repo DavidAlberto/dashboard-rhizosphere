@@ -4,7 +4,7 @@ richmeasvars <- c("Observed", "Chao1", "ACE", "Shannon",
                   "Simpson", "InvSimpson", "Fisher")
 
 ## Define the UIX display
-sbp_rich <- sidebarPanel(
+richpage <- sidebarPanel(
   h4("Aesthetic Mapping"),
   fluidRow(column(width = 12,
                   div(class = "col-md-6", uiOutput("rich_uix_x")),
@@ -54,13 +54,13 @@ sbp_rich <- sidebarPanel(
 )
 
 ## Richness Server
-richpage <- fluidPage(theme = shinytheme("cosmo"),
-                      headerPanel("Alpha Diversity Estimates", "windowTitle"),
-                      fluidRow(
-                        sbp_rich,
-                        column(width = 8, plotOutput("richness"), offset = 0)
-                      ),
-                      fluidRow(
-                        column(width = 12, includeMarkdown("panels/paneldoc/richness.md"))
-                      )
-)
+# richpage <- fluidPage(theme = shinytheme("cosmo"),
+#                       headerPanel("Alpha Diversity Estimates", "windowTitle"),
+#                       fluidRow(
+#                         sbp_rich,
+#                         column(width = 8, plotOutput("richness"), offset = 0)
+#                       ),
+#                       fluidRow(
+#                         column(width = 12, includeMarkdown("panels/paneldoc/richness.md"))
+#                       )
+# )

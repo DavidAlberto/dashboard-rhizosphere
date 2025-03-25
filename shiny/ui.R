@@ -127,17 +127,17 @@ ordlist <- ordlist[-which(ordlist %in% c("MDS", "PCoA"))]
 ordlist <- c(list("MDS/PCoA" = "MDS"), ordlist)
 
 # Define each fluid page
-make_fluidpage <- function(fptitle = "", sbp, outplotid, markdownDoc = "") {
-  mdRow <- fluidRow(column(width = 12, " "))
-  if (nchar(markdownDoc) > 0) {
-    mdRow <- fluidRow(column(width = 12, includeMarkdown(file.path("panels/paneldoc", markdownDoc))))
-  }
-  fluidPage(
-    headerPanel(fptitle, "windowTitle"),
-    fluidRow(sbp, column(width = 8, plotOutput(outplotid))),
-    mdRow
-  )
-}
+# make_fluidpage <- function(fptitle = "", sbp, outplotid, markdownDoc = "") {
+#   mdRow <- fluidRow(column(width = 12, " "))
+#   if (nchar(markdownDoc) > 0) {
+#     mdRow <- fluidRow(column(width = 12, includeMarkdown(file.path("panels", markdownDoc))))
+#   }
+#   fluidPage(
+#     headerPanel(fptitle, "windowTitle"),
+#     fluidRow(sbp, column(width = 8, plotOutput(outplotid))),
+#     mdRow
+#   )
+# }
 
 ## Load panels UIs
 # source("panels/panel_ui_data.R", local = TRUE)
@@ -145,18 +145,18 @@ source("panels/panel_ui_filter.R", local = TRUE)
 source("panels/panel_ui_bar.R", local = TRUE)
 source("panels/panel_ui_richness.R", local = TRUE)
 source("panels/panel_ui_ordination.R", local = TRUE)
+#source("panels/panel_ui_heatmap.R", local = TRUE)
 #source("panels/panel_ui_net.R", local = TRUE)
 #source("panels/panel_ui_d3.R", local = TRUE)
-#source("panels/panel_ui_heatmap.R", local = TRUE)
 #source("panels/panel_ui_scatter.R", local = TRUE)
 #source("panels/panel_ui_palette.R", local = TRUE)
 #source("panels/panel_ui_provenance.R", local = TRUE)
 
 # Transform panel is only documentation
-transpage <- fluidPage(
-  headerPanel("Transform Widget Documentation"),
-  fluidRow(column(width = 12, includeMarkdown("panels/paneldoc/transform.md")))
-)
+# transpage <- fluidPage(
+#   headerPanel("Transform Widget Documentation"),
+#   fluidRow(column(width = 12, includeMarkdown("panels/paneldoc/transform.md")))
+# )
 
 # Header tag list
 # headerTagList <- list(
