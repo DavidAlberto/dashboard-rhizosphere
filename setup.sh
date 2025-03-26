@@ -40,15 +40,17 @@ check_command() {
 log_info "Verifying Git installation..."
 check_command git
 
-if [ ! -d "dashboard-rhizosphere" ]; then
+if [ ! -f "setup.sh" ] && [ ! -d "dashboard-rhizosphere" ]; then
     log_info "Cloning repository..."
     # git clone https://github.com/DavidAlberto/dashboard-rhizosphere.git || \
         # handle_error ${LINENO} "Failed to clone the repository"
-    # For testing
+    # For testing purposes, clone the 'dev' branch only
     git clone -b dev --single-branch https://github.com/DavidAlberto/dashboard-rhizosphere.git || \
         handle_error ${LINENO} "Failed to clone the repository"
+    cd dashboard-rhizosphere || handle_error ${LINENO} "Failed to enter the project directory"
+elif [ -f "setup.sh" ]; then
+    log_info "Already inside the repository. Skipping clone step."
 fi
-cd dashboard-rhizosphere || handle_error ${LINENO} "Failed to enter the project directory"
 
 # ─── MINICONDA INSTALLATION ─────────────────────────────────────────────────────
 if ! command -v conda &> /dev/null; then
