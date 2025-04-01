@@ -110,11 +110,29 @@ This script will install the necessary R packages and dependencies for the proje
 
 Once the setup is complete, you can run the application using the following command in the R console:
 
+**Local mode**
+
+For testing on your local machine:
+
 ```R
-# Run the application
 library("shiny")
-runApp("shiny/.")
+runApp(appDir = "shiny/.", host = "127.0.0.1", port = 0209, launch.browser = TRUE) 
 ```
+
+The application will automatically open in your default browser at: http://localhost:0209 (or http://127.0.0.1:0209).
+
+**Server mode**
+
+For remote access (server):
+
+```R
+library("shiny")
+shiny::runApp(appDir = "shiny/.", host = "127.0.0.1", port = 0209, launch.browser = FALSE)
+```
+
+Accessible from http://localhost:0209 or http://<server-IP-or-hostname>:0209
+
+If you want to run the application in a different port, you can change the `port` parameter in the `runApp` function.
 
 ## Troubleshooting
 
