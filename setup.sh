@@ -65,35 +65,61 @@ if ! command -v conda &> /dev/null; then
 fi
 
 # Initialize conda for the current session
-if [ -f "$HOME/miniconda/etc/profile.d/conda.sh" ]; then
-    source "$HOME/miniconda/etc/profile.d/conda.sh"
+CONDA_BASE=$(conda info --base 2>/dev/null)
+if [ -n "$CONDA_BASE" ] && [ -f "$CONDA_BASE/etc/profile.d/conda.sh" ]; then
+    source "$CONDA_BASE/etc/profile.d/conda.sh"
 else
     eval "$(conda shell.bash hook)" || handle_error ${LINENO} "Error initializing conda"
 fi
 
-# ─── CREATE CONDA ENVIRONMENT FROM YAML ────────────────────────────────────────
+# ─── CREATE CONDA ENVIRONMENT FROM YAML IN PROJECT FOLDER ───────────────────────
+# SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# ENV_YML="$SCRIPT_DIR/environment.yml"
+# CONDA_ENV_PATH="$SCRIPT_DIR/rhizosphere"  # Keep the rhizosphere environment within your project folder
+
+# if [ ! -f "$ENV_YML" ]; then
+#     handle_error ${LINENO} "File '$ENV_YML' not found. Please create it with the desired configuration."
+# fi
+
+# log_info "Creating (or recreating) the conda environment from '$ENV_YML'..."
+
+# # Remove existing environment (only if it exists locally)
+# if [ -d "$CONDA_ENV_PATH" ]; then
+#     conda env remove -p "$CONDA_ENV_PATH" -y || true
+# fi
+
+# # Create new environment
+# conda env create -f "$ENV_YML" -p "$CONDA_ENV_PATH" || \
+#     handle_error ${LINENO} "Error creating the conda environment"
+
+# # Activate conda environment
+# log_info "Activating conda environment: $CONDA_ENV_PATH"
+# conda activate "$CONDA_ENV_PATH" || handle_error ${LINENO} "Error activating the conda environment"
+
+# ─── CREATE GLOBAL CONDA ENVIRONMENT FROM YAML ─────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ENV_YML="$SCRIPT_DIR/environment.yml"
-CONDA_ENV_PATH="$SCRIPT_DIR/.renv"  # Keep the .renv environment within your project folder
+ENV_NAME="rhizosphere"  # Name of the conda environment
 
 if [ ! -f "$ENV_YML" ]; then
     handle_error ${LINENO} "File '$ENV_YML' not found. Please create it with the desired configuration."
 fi
 
-log_info "Creating (or recreating) the conda environment from '$ENV_YML'..."
+log_info "Creating (or recreating) the global conda environment '$ENV_NAME' from '$ENV_YML'..."
 
-# Remove existing environment (only if it exists locally)
-if [ -d "$CONDA_ENV_PATH" ]; then
-    conda env remove -p "$CONDA_ENV_PATH" -y || true
+# Remove existing environment (only if it exists globally)
+if conda info --envs | grep -q "^$ENV_NAME\s"; then
+    conda env remove -n "$ENV_NAME" -y || true
 fi
 
 # Create new environment
-conda env create -f "$ENV_YML" -p "$CONDA_ENV_PATH" || \
+conda env create -f "$ENV_YML" -n "$ENV_NAME" || \
     handle_error ${LINENO} "Error creating the conda environment"
 
 # Activate conda environment
-log_info "Activating conda environment: $CONDA_ENV_PATH"
-conda activate "$CONDA_ENV_PATH" || handle_error ${LINENO} "Error activating the conda environment"
+log_info "Activating conda environment: $ENV_NAME"
+conda activate "$ENV_NAME" || handle_error ${LINENO} "Error activating the conda environment"
+
 
 # ─── RUN SETUP.R TO RESTORE R ENVIRONMENT ───────────────────────────────────────
 SETUP_R_SCRIPT="setup.R"
