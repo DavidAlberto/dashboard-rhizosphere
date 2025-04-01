@@ -1,8 +1,12 @@
-name: .renv
+name: rhizosphere
 channels:
   - bioconda
   - conda-forge
   - defaults
 dependencies:
-  - r-base=4.4.0
+  - conda-forge::r-base=4.4.0
   - conda-forge::r-essentials
+  - conda-forge::r-curl
+
+variables:
+  LD_LIBRARY_PATH: "$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
