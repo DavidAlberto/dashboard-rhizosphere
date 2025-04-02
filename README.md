@@ -13,7 +13,7 @@
     - [1. Clone the Repository](#1-clone-the-repository)
     - [2. Create a Conda Environment](#2-create-a-conda-environment)
     - [3. R Environment Setup](#3-r-environment-setup)
-    - [4. Run the Application](#4-run-the-application)
+  - [Run the Application](#run-the-application)
   - [Troubleshooting](#troubleshooting)
 
 ## Overview
@@ -85,6 +85,7 @@ If you want to create the environment in a specific directory, you can use the `
 
 ```bash
 conda env create -f environment.yml --prefix .rhizosphere
+./setup_conda-env.sh # Option 1
 conda activate .rhizosphere
 ```
 
@@ -92,6 +93,7 @@ Else, you can create the environment in the default Conda environment directory
 
 ```bash
 conda env create -f environment.yml
+./setup_conda-env.sh # Option 2
 conda activate rhizosphere
 ```
 
@@ -106,7 +108,7 @@ Rscript setup.R
 
 This script will install the necessary R packages and dependencies for the project. It may take some time to complete, depending on your internet connection and system performance.
 
-### 4. Run the Application
+## Run the Application
 
 Once the setup is complete, you can run the application using the following command in the R console:
 
