@@ -132,7 +132,7 @@ library("shiny")
 shiny::runApp(appDir = "shiny/.", host = "127.0.0.1", port = 9209, launch.browser = FALSE)
 ```
 
-Accessible from http://localhost:9209 or http://<server-IP-or-hostname>:9209
+Accessible from http://localhost:9209 or http://\<server-IP-or-hostname>:9209
 
 If you want to run the application in a different port, you can change the `port` parameter in the `runApp` function.
 
