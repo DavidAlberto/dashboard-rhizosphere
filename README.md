@@ -14,6 +14,9 @@
     - [2. Create a Conda Environment](#2-create-a-conda-environment)
     - [3. R Environment Setup](#3-r-environment-setup)
   - [Run the Application](#run-the-application)
+  - [Removing a repository and conda environment](#removing-a-repository-and-conda-environment)
+    - [Deleting a repository with an Local Conda Environment](#deleting-a-repository-with-an-local-conda-environment)
+    - [Deleting a repository and then removing a Global Conda Environment](#deleting-a-repository-and-then-removing-a-global-conda-environment)
   - [Troubleshooting](#troubleshooting)
 
 ## Overview
@@ -135,6 +138,46 @@ shiny::runApp(appDir = "shiny/.", host = "127.0.0.1", port = 9209, launch.browse
 Accessible from http://localhost:9209 or http://\<server-IP-or-hostname>:9209
 
 If you want to run the application in a different port, you can change the `port` parameter in the `runApp` function.
+
+## Removing a repository and conda environment
+
+If you create a local repository and Conda environment and you want to remove it completely, follow these steps:
+
+### Deleting a repository with an Local Conda Environment
+
+1. Navigate to the parent directory of the repository:
+   
+```bash
+cd /path/to/parent/directory
+```
+
+2. Remove the repository and its Conda environment (`.rhizosphere`):
+   
+```bash
+rm -rf dashboard-rhizosphere
+```
+
+This will delete the entire repository, including the Conda environment stored within it.
+
+### Deleting a repository and then removing a Global Conda Environment
+
+If the Conda environment was installed globally (not inside the repository folder), you need to remove it separately:
+
+1. First, remove the local repository as shown above.
+
+2. Check the available Conda environments to confirm the name of the environment you want to delete:
+
+```bash
+conda env list
+```
+
+3. Remove the global Conda environment:
+
+```bash
+conda env remove -n rhizosphere
+```
+
+Replace `rhizosphere` with the actual name of your environment.
 
 ## Troubleshooting
 

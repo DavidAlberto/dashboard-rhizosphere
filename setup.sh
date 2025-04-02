@@ -53,6 +53,8 @@ else
 fi
 
 # ─── MINICONDA INSTALLATION ─────────────────────────────────────────────────────
+log_info "Verifying Conda installation..."
+
 if ! command -v conda &> /dev/null; then
     log_info "Conda not found. Installing Miniconda..."
     check_command wget
@@ -73,17 +75,17 @@ else
 fi
 
 # ─── CONDA ENVIRONMENT SETUP ───────────────────────────────────────────────────
-echo "Select the type of Conda environment to create:"
-echo "1) Local environment (in project folder)"
-echo "2) Global environment (in Conda's envs directory)"
-read -p "Enter your choice [1/2]: " ENV_CHOICE
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]:-$0}")")
 ENV_YML="$SCRIPT_DIR/environment.yml"
 
 if [ ! -f "$ENV_YML" ]; then
     handle_error ${LINENO} "File '$ENV_YML' not found. Please create it with the desired configuration."
 fi
+
+echo "Select the type of Conda environment to create:"
+echo "1) Local environment (in project folder)"
+echo "2) Global environment (in Conda's envs directory)"
+read -p "Enter your choice [1/2]: " ENV_CHOICE
 
 case "$ENV_CHOICE" in
     1)
@@ -101,13 +103,14 @@ case "$ENV_CHOICE" in
             handle_error ${LINENO} "Error creating the conda environment"
         
         # Configure activation/deactivation scripts
+        log_info "Configuring activation/deactivation scripts..."
         mkdir -p "$CONDA_ENV_PATH/etc/conda/activate.d"
         mkdir -p "$CONDA_ENV_PATH/etc/conda/deactivate.d"
 
         cat << EOF > "$CONDA_ENV_PATH/etc/conda/activate.d/env_vars.sh"
 #!/bin/sh
 export PKG_CONFIG_PATH="$CONDA_ENV_PATH/lib/pkgconfig"
-export LD_LIBRARY_PATH="$CONDA_ENV_PATH/lib:\$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH="$CONDA_ENV_PATH/lib:\${LD_LIBRARY_PATH:-}"
 export PATH="$CONDA_ENV_PATH/bin:\$PATH"
 EOF
         chmod +x "$CONDA_ENV_PATH/etc/conda/activate.d/env_vars.sh"
@@ -115,7 +118,7 @@ EOF
         cat << EOF > "$CONDA_ENV_PATH/etc/conda/deactivate.d/env_vars.sh"
 #!/bin/sh
 unset PKG_CONFIG_PATH
-export LD_LIBRARY_PATH=\$(echo "\$LD_LIBRARY_PATH" | sed -e "s|$CONDA_ENV_PATH/lib:||")
+export LD_LIBRARY_PATH=\$(echo "\${LD_LIBRARY_PATH:-}" | sed -e "s|$CONDA_ENV_PATH/lib:||")
 export PATH=\$(echo "\$PATH" | sed -e "s|$CONDA_ENV_PATH/bin:||")
 EOF
         chmod +x "$CONDA_ENV_PATH/etc/conda/deactivate.d/env_vars.sh"
@@ -139,24 +142,31 @@ EOF
         # Create new environment
         conda env create -f "$ENV_YML" -n "$ENV_NAME" || \
             handle_error ${LINENO} "Error creating the conda environment"
-        
+
+        # Obtein the path of the global environment
+        CONDA_ENV_PATH=$(conda env list | grep "^$ENV_NAME\s" | awk '{print $2}')
+        if [ -z "$CONDA_ENV_PATH" ]; then
+            handle_error ${LINENO} "Failed to obtain the path of the global environment '$ENV_NAME'"
+        fi
+
         # Configure activation/deactivation scripts
+        log_info "Configuring activation/deactivation scripts..."
         mkdir -p "$CONDA_PREFIX/etc/conda/activate.d"
         mkdir -p "$CONDA_PREFIX/etc/conda/deactivate.d"
 
-        cat << EOF > "$CONDA_PREFIX/etc/conda/activate.d/env_vars.sh"
+        cat << EOF > "$CONDA_ENV_PATH/etc/conda/activate.d/env_vars.sh"
 #!/bin/sh
-export PKG_CONFIG_PATH="$CONDA_PREFIX/lib/pkgconfig"
-export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:\$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="$CONDA_ENV_PATH/lib/pkgconfig"
+export LD_LIBRARY_PATH="$CONDA_ENV_PATH/lib:\${LD_LIBRARY_PATH:-}"
 EOF
-        chmod +x "$CONDA_PREFIX/etc/conda/activate.d/env_vars.sh"
+        chmod +x "$CONDA_ENV_PATH/etc/conda/activate.d/env_vars.sh"
 
-        cat << EOF > "$CONDA_PREFIX/etc/conda/deactivate.d/env_vars.sh"
+        cat << EOF > "$CONDA_ENV_PATH/etc/conda/deactivate.d/env_vars.sh"
 #!/bin/sh
 unset PKG_CONFIG_PATH
-export LD_LIBRARY_PATH=\$(echo "\$LD_LIBRARY_PATH" | sed -e "s|$CONDA_PREFIX/lib:||")
+export LD_LIBRARY_PATH=\$(echo "\${LD_LIBRARY_PATH:-}" | sed -e "s|$CONDA_ENV_PATH/lib:||")
 EOF
-        chmod +x "$CONDA_PREFIX/etc/conda/deactivate.d/env_vars.sh"
+        chmod +x "$CONDA_ENV_PATH/etc/conda/deactivate.d/env_vars.sh"
 
         # Activate the global environment
         log_info "Activating conda environment: $ENV_NAME"
