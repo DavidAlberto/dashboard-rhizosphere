@@ -78,13 +78,6 @@ echo "1) Local environment (in project folder)"
 echo "2) Global environment (in Conda's envs directory)"
 read -p "Enter your choice [1/2]: " ENV_CHOICE
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ENV_YML="$SCRIPT_DIR/environment.yml"
-
-if [ ! -f "$ENV_YML" ]; then
-    handle_error ${LINENO} "File '$ENV_YML' not found. Please create it with the desired configuration."
-fi
-
 case "$ENV_CHOICE" in
     1)
         # Config for local environment
@@ -169,12 +162,28 @@ EOF
         ;;
 esac
 
+# Mensaje final con instrucciones
+log_info "Environment setup completed."
+if [[ "$ENV_CHOICE" == "1" ]]; then
+    log_info "To activate this environment, run: conda activate $CONDA_ENV_PATH"
+else
+    log_info "To activate this environment, run: conda activate $ENV_NAME"
+fi
+
 # ─── RUN SETUP.R TO RESTORE R ENVIRONMENT ───────────────────────────────────────
 SETUP_R_SCRIPT="$SCRIPT_DIR/setup.R"
 
 if [ -f "$SETUP_R_SCRIPT" ]; then
     log_info "Running R setup script: $SETUP_R_SCRIPT"
-    Rscript "$SETUP_R_SCRIPT" || handle_error ${LINENO} "Error running $SETUP_R_SCRIPT"
+    
+    # Verify if Rscript is available
+    if ! command -v Rscript &> /dev/null; then
+        log_warning "Rscript not found. Please install R to run the setup script."
+    else
+        # Run the R script to restore the R environment
+        log_info "Running R setup script: $SETUP_R_SCRIPT"
+        Rscript "$SETUP_R_SCRIPT" || handle_error ${LINENO} "Error running $SETUP_R_SCRIPT"
+    fi
 else
     log_warning "No '$SETUP_R_SCRIPT' found. Skipping R environment setup."
 fi
