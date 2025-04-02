@@ -118,10 +118,10 @@ For testing on your local machine:
 
 ```R
 library("shiny")
-runApp(appDir = "shiny/.", host = "127.0.0.1", port = 0209, launch.browser = TRUE) 
+runApp(appDir = "shiny/.", host = "127.0.0.1", port = 9209, launch.browser = TRUE) 
 ```
 
-The application will automatically open in your default browser at: http://localhost:0209 (or http://127.0.0.1:0209).
+The application will automatically open in your default browser at: http://localhost:9209 (or http://127.0.0.1:9209).
 
 **Server mode**
 
@@ -129,10 +129,10 @@ For remote access (server):
 
 ```R
 library("shiny")
-shiny::runApp(appDir = "shiny/.", host = "127.0.0.1", port = 0209, launch.browser = FALSE)
+shiny::runApp(appDir = "shiny/.", host = "127.0.0.1", port = 9209, launch.browser = FALSE)
 ```
 
-Accessible from http://localhost:0209 or http://<server-IP-or-hostname>:0209
+Accessible from http://localhost:9209 or http://<server-IP-or-hostname>:9209
 
 If you want to run the application in a different port, you can change the `port` parameter in the `runApp` function.
 
