@@ -75,24 +75,25 @@ else
 fi
 
 # ─── CONDA ENVIRONMENT SETUP ───────────────────────────────────────────────────
-SCRIPT_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]:-$0}")")
-ENV_YML="$SCRIPT_DIR/environment.yml"
-
-if [ ! -f "$ENV_YML" ]; then
-    handle_error ${LINENO} "File '$ENV_YML' not found. Please create it with the desired configuration."
-fi
-
 echo "Select the type of Conda environment to create:"
 echo "1) Local environment (in project folder)"
 echo "2) Global environment (in Conda's envs directory)"
 read -r -p "Enter your choice [1/2]: " ENV_CHOICE
+
+# Check if environment.yml file exists
+SCRIPT_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]:-$0}")")
+ENV_YML="$SCRIPT_DIR/environment.yml"
+
+
+if [ ! -f "$ENV_YML" ]; then
+    handle_error ${LINENO} "File '$ENV_YML' not found. Please create it with the desired configuration."
+fi
 
 # Validate user input
 if [[ ! "$ENV_CHOICE" =~ ^[12]$ ]]; then
     handle_error ${LINENO} "Invalid choice. Please enter 1 for local or 2 for global."
     exit 1
 fi
-
 
 case "$ENV_CHOICE" in
     1)
