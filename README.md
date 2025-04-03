@@ -65,7 +65,7 @@ For automatic setup, run:
 
 ```bash
 wget https://raw.githubusercontent.com/DavidAlberto/dashboard-rhizosphere/refs/heads/dev/setup.sh
-chomd +x setup.sh
+chmod +x setup.sh
 ./setup.sh
 ```
 
@@ -115,7 +115,7 @@ This script will install the necessary R packages and dependencies for the proje
 
 ## Run the Application
 
-Once the setup is complete, you can run the application using the following command in the R console:
+Once the setup is complete, activate the Conda environment and run the application using the following command in the R console:
 
 **Local mode**
 
