@@ -64,7 +64,9 @@ source $HOME/miniconda/bin/activate
 For automatic setup, run:
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/DavidAlberto/dashboard-rhizosphere/refs/heads/dev/setup.sh | bash
+wget https://raw.githubusercontent.com/DavidAlberto/dashboard-rhizosphere/refs/heads/dev/setup.sh
+chomd +x setup.sh
+./setup.sh
 ```
 
 ## Manual Setup
