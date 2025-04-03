@@ -65,7 +65,7 @@ For automatic setup, run:
 
 ```bash
 wget https://raw.githubusercontent.com/DavidAlberto/dashboard-rhizosphere/refs/heads/dev/setup.sh
-chomd +x setup.sh
+chmod +x setup.sh
 ./setup.sh
 ```
 
