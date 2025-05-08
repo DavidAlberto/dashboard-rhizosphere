@@ -4,11 +4,8 @@ source("parameters_ggsave.R", local = TRUE)
 
 # Load datasets
 env_psdata <- new.env()
-load("data/biom_srhizosphere.RData", envir = env_psdata) 
+load("data/biom_srhizosphere.RData", envir = env_psdata)
 attach(env_psdata)
-
-# Get phyloseq data
-get_phyloseq_data <- rhizo
 
 # Utility functions
 ## For pasting times into things
@@ -78,11 +75,35 @@ shiny_phyloseq_ggtheme_list <- list(
 ## Plot of fail rendering
 RstudioPNGsp <- png::readPNG("www/RStudio-logo-shiny-phyloseq.png")
 RasterRstudio <- grid::rasterGrob(RstudioPNGsp, interpolate = TRUE)
-fail_gen <- function(main = "Change settings and/or click buttons.", subtext = "", image = RasterRstudio) {
+fail_gen <- function(main = "Change settings and/or click buttons.",
+                    subtext = "",
+                    image = RasterRstudio){
   qplot(x = 0, y = 0, main = main) +
-    annotation_custom(image, xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf) +
-    annotate("text", 0, 0, size = 10, color = "black", hjust = 0.5, vjust = -1, label = subtext) +
-    theme_blank_custom
+    annotation_custom(image, 
+                      xmin = -Inf, 
+                      xmax = Inf, 
+                      ymin = -Inf, 
+                      ymax = Inf) +
+    annotate("text", 
+             0, 
+             0, 
+             size = 10, 
+             color = "black", 
+             hjust = 0.5, 
+             vjust = -1, 
+             label = subtext) +
+    theme_bw() + 
+    theme(
+      plot.title = element_text(size = 28),
+      panel.grid.major = element_blank(), 
+      panel.grid.minor = element_blank(), 
+      axis.text.x = element_blank(),
+      axis.text.y = element_blank(),
+      axis.title.x = element_blank(),
+      axis.title.y = element_blank(),
+      axis.ticks = element_blank(),
+      panel.border = element_blank()
+    )
 }
 
 ## Print plot shiny conditional

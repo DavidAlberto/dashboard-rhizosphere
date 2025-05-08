@@ -82,7 +82,8 @@ read -r -p "Enter your choice [1/2]: " ENV_CHOICE
 
 # Check if environment.yml file exists
 SCRIPT_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]:-$0}")")
-ENV_YML="$SCRIPT_DIR/environment.yml"
+# ENV_YML="$SCRIPT_DIR/environment.yml"
+ENV_YML="$SCRIPT_DIR/spec-file.txt"
 
 
 if [ ! -f "$ENV_YML" ]; then
@@ -107,7 +108,7 @@ case "$ENV_CHOICE" in
         fi
         
         # Create new environment
-        conda env create -f "$ENV_YML" --prefix "$CONDA_ENV_PATH" || \
+        conda env create --file "$ENV_YML" --prefix "$CONDA_ENV_PATH" || \
             handle_error ${LINENO} "Error creating the conda environment"
         
         # Configure activation/deactivation scripts
@@ -148,7 +149,7 @@ EOF
         fi
         
         # Create new environment
-        conda env create -f "$ENV_YML" -n "$ENV_NAME" || \
+        conda env create --file "$ENV_YML" -n "$ENV_NAME" || \
             handle_error ${LINENO} "Error creating the conda environment"
 
         # Obtein the path of the global environment
@@ -194,7 +195,7 @@ if [ -f "$SETUP_R_SCRIPT" ]; then
     log_info "Running R setup script: $SETUP_R_SCRIPT"
     Rscript "$SETUP_R_SCRIPT" || handle_error ${LINENO} "Error running $SETUP_R_SCRIPT"
 else
-    log_warning "No '$SETUP_R_SCRIPT' found. Skipping R environment setup."
+    log_warning "No '$SETUP_R_SCRIPT' found. Skipping R environment setup."`
 fi
 
 # ─── FINAL MESSAGE ─────────────────────────────────────────────────────────────

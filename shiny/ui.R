@@ -24,7 +24,8 @@ uiptsz <- function(id, ...) {
                   min = 1,
                   max = NA,
                   value = 5,
-                  step = 1, ...)
+                  step = 1,
+                  ...)
 }
 
 ## Opacity
@@ -34,19 +35,20 @@ uialpha <- function(id, ...) {
                   min = 0,
                   max = 1,
                   value = 1,
-                  step = 0.1, ...)
+                  step = 0.1, 
+                  ...)
 }
 
 ## Color pallete
 uipal <- function(id, default = "Set1") {
-  selectInput(inputId =id,
+  selectInput(inputId = id,
               label = "Palette",
               choices = rownames(RColorBrewer::brewer.pal.info),
               selected = default)
 }
 
 # Plot theme
-uitheme <- function(id, default="bl_wh"){
+uitheme <- function(id, default = "bl_wh"){
   selectInput(inputId = id,
               label = "Theme",
               choices = names(shiny_phyloseq_ggtheme_list),
@@ -80,7 +82,8 @@ dim_and_down <- function(suffix, secTitle = "Dimensions & Download") {
 }
 
 ## Select details of plots
-theme_ui_details <- function(suffix, secTitle = "Details", pal = TRUE, them = TRUE, ptsz = FALSE, alpha = FALSE, addList = NULL) {
+theme_ui_details <- function(suffix, secTitle = "Details", pal = TRUE,
+                             them = TRUE, ptsz = FALSE, alpha = FALSE, addList = NULL) {
   elementList <- list(width = 12, h4(secTitle))
   if (pal) {
     elementList <- c(elementList, list(div(class = "col-md-3",
@@ -183,7 +186,7 @@ my_theme <- bs_theme(
 
 # Principal UI function
 ui <- navbarPage(
-  title = "Rhizosphere Metagenomics Analysis",
+  title = "MicroAgroBiome",
   # tabPanel("Select Dataset", datapage),
   tabPanel("Filter", filterpage),
   tabPanel("Bar", barpage),
@@ -198,6 +201,6 @@ ui <- navbarPage(
   #tabPanel("Provenance", provpage),
   header = headerTagList,
   collapsible = TRUE,
-  windowTitle = "Rhizosphere Metagenomics Analysis"
+  windowTitle = "MicroAgroBiome"
 )
 shinyUI(ui)

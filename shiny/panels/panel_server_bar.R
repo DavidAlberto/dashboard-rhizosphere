@@ -38,47 +38,111 @@ physeq_bar <- reactive({
 })
 
 ## Make bar plot
+# make_bar_plot <- reactive({
+#   req(physeq_bar(), input$x_bar)
+
+#   p0 <- NULL
+#   try(p0 <- plot_bar(physeq_bar(),
+#                      x = input$x_bar,
+#                      y = "Abundance",
+#                      fill = av(input$color_bar),
+#                      facet_grid = get_facet_grid(input$facetrow_bar,
+#                                                  input$facetcol_bar)),
+#       silent = FALSE)
+#   if (!inherits(p0, "ggplot")) {
+#     warning("Could not render bar plot, attempting without faceting...")
+#     try(p0 <- plot_bar(physeq_bar(),
+#                        x = input$xvar,
+#                        y = "Abundance",
+#                        fill = av(input$color_bar)),
+#         silent = FALSE)
+#   }
+#   return(p0)
+# })
+
 make_bar_plot <- reactive({
+  req(physeq_bar(), input$x_bar)
   p0 <- NULL
-  try(p0 <- plot_bar(physeq_bar(),
-                     x = input$x_bar,
-                     y = "Abundance",
-                     fill = av(input$color_bar),
-                     facet_grid = get_facet_grid(input$facetrow_bar,
-                                                 input$facetcol_bar)),
-      silent = TRUE)
-  if (!inherits(p0, "ggplot")) {
-    warning("Could not render bar plot, attempting without faceting...")
-    try(p0 <- plot_bar(physeq_bar(),
-                       x = xvar,
-                       y = "Abundance",
-                       fill = av(input$color_bar)),
-        silent = TRUE)
-  }
+  
+  tryCatch({
+    message("Make bar plot with faceting")
+    p0 <- plot_bar(physeq_bar(),
+                  x = input$x_bar,
+                  y = "Abundance",
+                  fill = av(input$color_bar),
+                  facet_grid = get_facet_grid(input$facetrow_bar, input$facetcol_bar))
+    message("Bar plot with faceting created successfully")
+  }, error = function(e) {
+    message("Error with bar plot with faceting", e$message)
+    message("Make bar plot without faceting...")
+    tryCatch({
+      p0 <<- plot_bar(physeq_bar(),
+                    x = input$x_bar,
+                    y = "Abundance",
+                    fill = av(input$color_bar))
+      message("Bar plot without faceting created successfully")
+    }, error = function(e2) {
+      message("Error with bar plot without faceting: ", e2$message)
+    })
+  })
+
   return(p0)
 })
 
-## Finalize bar plot
 finalize_bar_plot <- reactive({
+  req(physeq_bar(), input$x_bar)
+  p0 <- NULL
+  
   if (input$actionb_bar < 1) {
+    message("Button has not been pressed, displaying message")
     p0 <- fail_gen("Change settings and/or click '(Re)Build Graphic' Button")
+  } else {
+    message("Button pressed, generating graph")
+    isolate({
+      p0 <- make_bar_plot()
+    })
+    
+    # Modify the plot based on user input
+    if (inherits(p0, "ggplot")) {
+      message("Applying themes and settings to the chart")
+      p0 <- p0 + scale_fill_brewer(palette = input$pal_bar) +
+        shiny_phyloseq_ggtheme_list[[input$theme_bar]] +
+        theme(axis.text.x = element_text(angle = input$x_axis_angle_bar,
+                                        vjust = 0.5,
+                                        hjust = 1))
+    } else {
+      message("p0 is not a ggplot object, maintaining error message")
+    }
   }
-  isolate({
-    p0 <- make_bar_plot()
-  })
-  p0 <- p0 + scale_fill_brewer(palette = input$pal_bar) +
-    shiny_phyloseq_ggtheme_list[[input$theme_bar]]
-  p0 <- p0 +
-    theme(axis.text.x = element_text(angle = input$x_axis_angle_bar,
-                                     vjust = 0.5,
-                                     hjust = 1)
-    )
+  
   return(p0)
 })
 
 ## Render plot in panel
+# output$bar <- renderPlot({
+#   print(finalize_bar_plot())
+# },
+# width = function() {72 * input$width_bar},
+# height = function() {72 * input$height_bar})
+
 output$bar <- renderPlot({
-  shiny_phyloseq_print(finalize_bar_plot())
+  result <- tryCatch({
+    p <- finalize_bar_plot()
+    
+    if (inherits(p, "ggplot")) {
+      message("print ggplot")
+      print(p)
+    } else {
+      message("Not ggplot, using fail_gen function")
+      fail_gen("The graph could not be generated. Check the parameters.")
+    }
+  }, error = function(e) {
+    message("Error in renderPlot: ", e$message)
+    fail_gen(paste("Error:", e$message))
+  })
+  
+  message("Render complete")
+  return(result)
 },
 width = function() {72 * input$width_bar},
 height = function() {72 * input$height_bar})
