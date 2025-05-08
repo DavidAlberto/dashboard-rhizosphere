@@ -8,6 +8,7 @@ theme_set(theme_bw())
 # Principal Server function
 ## Store the inventory of objects
 shinyPhyloseqServerObjectsList <- ls()
+
 shinyServer(function(input, output) {
   ## Data and filtering panels
   # source("panels/panel_server_data.R", local = TRUE)
@@ -56,8 +57,10 @@ shinyServer(function(input, output) {
     return(returnvars)
   }
   uivar <- function(id, label = "Variable:", choices, selected = "NULL") {
-    selectInput(inputId = id, label = label,
-                choices = choices, selected = selected)
+    selectInput(inputId = id,
+                label = label,
+                choices = choices,
+                selected = selected)
   }
   # Load other panel modules
   source("panels/panel_server_bar.R", local = TRUE)
