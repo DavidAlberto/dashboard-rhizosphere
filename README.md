@@ -59,6 +59,14 @@ bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda
 source $HOME/miniconda/bin/activate
 ```
 
+Recommendation: If you encounter unusual errors during environment setup, we recommend cleaning Conda's cache by running the following command:
+
+```bash
+conda clean --all --yes
+```
+
+This command removes temporary files, downloaded packages, and build caches, which can help resolve issues caused by previous installations.
+
 ## Quick Setup
 
 For automatic setup, run:

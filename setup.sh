@@ -106,6 +106,10 @@ case "$ENV_CHOICE" in
         if [ -d "$CONDA_ENV_PATH" ]; then
             conda env remove -p "$CONDA_ENV_PATH" -y || true
         fi
+
+        # Delete Conda's cache
+        log_info "Deleting Conda's cache..."
+        conda clean --all --yes || handle_error ${LINENO} "Error cleaning Conda's cache"
         
         # Create new environment
         # conda env create --file "$ENV_YML" --prefix "$CONDA_ENV_PATH" || \
@@ -149,6 +153,10 @@ EOF
             conda env remove -n "$ENV_NAME" -y || true
         fi
         
+        # Delete Conda's cache
+        log_info "Deleting Conda's cache..."
+        conda clean --all --yes || handle_error ${LINENO} "Error cleaning Conda's cache"
+
         # Create new environment
         conda env create --file "$ENV_YML" -n "$ENV_NAME" || \
             handle_error ${LINENO} "Error creating the conda environment"
