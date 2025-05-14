@@ -1,55 +1,93 @@
-# Set CRAN repository
-options(repos = c(CRAN = "https://cran.rstudio.com/"))
+# setup.R - Config of the R environment
 
-# Check R version
-r_min_version <- "4.3.0"
+# Configure CRAN repository and default browser
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
+options(browser = "firefox")
+Sys.setenv(R_BROWSER = "firefox")
+
+# Verify minimum R version required 
+r_min_version <- "4.4.0"
 if (compareVersion(as.character(getRversion()), r_min_version) < 0) {
-  stop("R version ", r_min_version,
-       " or higher is required. Please update R from http://cran.r-project.org/")
+  stop("R version", r_min_version, " or higher is requiered.\n",
+       "Please update R to the latest version.\n",
+       "You can download the latest version of R from http://cran.r-project.org/")
 }
 
-#Install or update BiocManager
+# Installing package managers if not available
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
 }
-BiocManager::install(update = TRUE, ask = FALSE)
 
-# Function to install or update packages
-install_or_update_package <- function(pkg, version = NULL) {
-  if (!requireNamespace(pkg, quietly = TRUE) ||
-      (!is.null(version) && packageVersion(pkg) < version)) {
-    message("Installing/updating package: ", pkg)
-    BiocManager::install(pkg, ask = FALSE)
-  }
-}
-
-# Install and load renv for environment management
-if (!requireNamespace("renv", quietly = TRUE)) {
-  install.packages("renv")
-}
-
-# Initialize the environment with renv (this creates the project and initial settings)
-# renv::init()
-
-# List of required packages
-required_packages <- c(
-  "shiny", "shinythemes", "DT", "phyloseq", "biomformat", "ggplot2",
-  "data.table", "genefilter", "grid", "gridExtra", "markdown", 
-  "rmarkdown", "bslib", "png", "RColorBrewer", "scales", "DESeq2"
+# Define required packages with their minimum versions
+required_packages <- list(
+  # Basic packages
+  "shiny" = "1.10.0",
+  "shinythemes" = "1.2.0",
+  "bslib" = "0.9.0",
+  "DT" = "0.33",
+  "rmarkdown" = "2.29",
+  
+  # Analysis packages
+  "phyloseq" = "1.50.0",
+  "biomformat" = "1.34.0",
+  "DESeq2" = "1.46.0",
+  "genefilter" = "1.90.0",
+  
+  # Visualization packages
+  "ggplot2" = "3.5.2",
+  "grid" = "4.4.3",
+  "gridExtra" = "2.3",
+  "RColorBrewer" = "1.1.3",
+  "scales" = "1.4.0",
+  "png" = "0.1.8",
+  
+  # Package for managing data
+  "data.table" = "1.17.0"
 )
 
-# Install or update required packages
-invisible(lapply(required_packages, install_or_update_package))
-
-# Load and display versions of installed packages
-for (pkg in required_packages) {
-  if (requireNamespace(pkg, quietly = TRUE)) {
-    library(pkg, character.only = TRUE)
-    message(pkg, " package version: ", packageVersion(pkg))
-  } else {
-    warning("Failed to load package: ", pkg)
+# Function to verify, install and load packages
+install_and_load_packages <- function(pkg_list) {
+  message("Verifying and installing packages...")
+  
+  for (pkg_name in names(pkg_list)) {
+    min_version <- pkg_list[[pkg_name]]
+    
+    # Verify if the package is installed
+    is_installed <- requireNamespace(pkg_name, quietly = TRUE)
+    needs_update <- FALSE
+    
+    # Check if you need to upgrade
+    if (is_installed) {
+      current_version <- as.character(packageVersion(pkg_name))
+      if (compareVersion(current_version, min_version) < 0) {
+        message("The package ", pkg_name, " (", current_version, 
+                ") is earlier than the required version (", min_version, ").")
+        needs_update <- TRUE
+      }
+    }
+    
+    # Install or upgrade if necessary
+    if (!is_installed || needs_update) {
+      message("Install ", pkg_name, " ", min_version, "...")
+      tryCatch({
+        BiocManager::install(pkg_name, update = FALSE, ask = FALSE)
+      }, error = function(e) {
+        warning("Error while installing ", pkg_name, ": ", e$message)
+      })
+    }
+    
+    # Load the package
+    if (requireNamespace(pkg_name, quietly = TRUE)) {
+      library(pkg_name, character.only = TRUE)
+      message("Load ", pkg_name, " version: ", packageVersion(pkg_name))
+    } else {
+      warning("Unable to load ", pkg_name)
+    }
   }
 }
 
-# Take a snapshot of the installed packages
-renv::snapshot()
+# Install and load the required packages
+install_and_load_packages(required_packages)
+
+message("\n✓ Configuration completed successfully.")
+message("✓ Environment saved in renv.lock for replayability.")

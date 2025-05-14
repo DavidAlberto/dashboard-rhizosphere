@@ -6,7 +6,7 @@ options(browser = "firefox")
 Sys.setenv(R_BROWSER = "firefox")
 
 # Verify minimum R version required 
-r_min_version <- "4.3.0"
+r_min_version <- "4.4.0"
 if (compareVersion(as.character(getRversion()), r_min_version) < 0) {
   stop("R version", r_min_version, " or higher is requiered.\n",
        "Please update R to the latest version.\n",
@@ -17,18 +17,18 @@ if (compareVersion(as.character(getRversion()), r_min_version) < 0) {
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
 }
-if (!requireNamespace("renv", quietly = TRUE)) {
-  install.packages("renv")
-}
+# if (!requireNamespace("renv", quietly = TRUE)) {
+#   install.packages("renv")
+# }
 
 # Configure and activate renv environment
-if (file.exists("renv.lock")) {
-  message("Restoring environment from renv.lock...")
-  renv::restore(prompt = FALSE)
-} else {
-  message("Initializing new renv environment...")
-  renv::init(prompt = FALSE)
-}
+# if (file.exists("renv.lock")) {
+#   message("Restoring environment from renv.lock...")
+#   renv::restore(prompt = FALSE)
+# } else {
+#   message("Initializing new renv environment...")
+#   renv::init(prompt = FALSE)
+# }
 
 # Define required packages with their minimum versions
 required_packages <- list(
@@ -37,18 +37,17 @@ required_packages <- list(
   "shinythemes" = "1.2.0",
   "bslib" = "0.9.0",
   "DT" = "0.33",
-  "markdown" = "2.0",
   "rmarkdown" = "2.29",
   
   # Analysis packages
   "phyloseq" = "1.50.0",
   "biomformat" = "1.34.0",
   "DESeq2" = "1.46.0",
-  "genefilter" = "1.88.0",
+  "genefilter" = "1.90.0",
   
   # Visualization packages
   "ggplot2" = "3.5.2",
-  "grid" = "4.4.2",
+  "grid" = "4.4.3",
   "gridExtra" = "2.3",
   "RColorBrewer" = "1.1.3",
   "scales" = "1.4.0",
@@ -99,11 +98,11 @@ install_and_load_packages <- function(pkg_list) {
   }
 }
 
-# Instalar y cargar los paquetes
+# Install and load the required packages
 install_and_load_packages(required_packages)
 
-# Guardar el entorno en renv.lock
-renv::snapshot(prompt = FALSE)
+# Save the renv environment
+# renv::snapshot(prompt = FALSE)
 
 message("\n✓ Configuration completed successfully.")
 message("✓ Environment saved in renv.lock for replayability.")

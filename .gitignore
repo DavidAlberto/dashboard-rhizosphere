@@ -1,4 +1,9 @@
 # R environment
 .rhizosphere/
 Dockerfile
-environment_original.yml
+environment.yml
+environment_extend.yml
+
+# R environment
+renv/
+renv.lock
