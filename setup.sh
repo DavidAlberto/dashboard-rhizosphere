@@ -199,14 +199,14 @@ EOF
 esac
 
 # ─── RUN SETUP.R TO RESTORE R ENVIRONMENT ───────────────────────────────────────
-SETUP_R_SCRIPT="$SCRIPT_DIR/setup.R"
+# SETUP_R_SCRIPT="$SCRIPT_DIR/setup.R"
 
-if [ -f "$SETUP_R_SCRIPT" ]; then
-    log_info "Running R setup script: $SETUP_R_SCRIPT"
-    Rscript "$SETUP_R_SCRIPT" || handle_error ${LINENO} "Error running $SETUP_R_SCRIPT"
-else
-    log_warning "No '$SETUP_R_SCRIPT' found. Skipping R environment setup."`
-fi
+# if [ -f "$SETUP_R_SCRIPT" ]; then
+#     log_info "Running R setup script: $SETUP_R_SCRIPT"
+#     Rscript "$SETUP_R_SCRIPT" || handle_error ${LINENO} "Error running $SETUP_R_SCRIPT"
+# else
+#     log_warning "No '$SETUP_R_SCRIPT' found. Skipping R environment setup."`
+# fi
 
 # ─── FINAL MESSAGE ─────────────────────────────────────────────────────────────
 log_success "Setup completed successfully!"
