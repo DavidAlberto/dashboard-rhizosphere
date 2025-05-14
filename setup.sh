@@ -158,7 +158,8 @@ EOF
         conda clean --all --yes || handle_error ${LINENO} "Error cleaning Conda's cache"
 
         # Create new environment
-        conda env create --file "$ENV_YML" -n "$ENV_NAME" || \
+        # conda env create --file "$ENV_YML" -n "$ENV_NAME" || \
+        conda create --file "$ENV_YML" -n "$ENV_NAME" || \
             handle_error ${LINENO} "Error creating the conda environment"
 
         # Obtein the path of the global environment
