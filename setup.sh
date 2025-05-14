@@ -108,7 +108,8 @@ case "$ENV_CHOICE" in
         fi
         
         # Create new environment
-        conda env create --file "$ENV_YML" --prefix "$CONDA_ENV_PATH" || \
+        # conda env create --file "$ENV_YML" --prefix "$CONDA_ENV_PATH" || \
+        conda create --file "$ENV_YML" --prefix "$CONDA_ENV_PATH" || \
             handle_error ${LINENO} "Error creating the conda environment"
         
         # Configure activation/deactivation scripts
