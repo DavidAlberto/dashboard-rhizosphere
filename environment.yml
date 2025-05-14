@@ -1,9 +1,0 @@
-name: rhizosphere
-channels:
-  - bioconda
-  - conda-forge
-  - anaconda
-  - defaults
-dependencies:
-  - conda-forge::r-base
-  - conda-forge::r-essentials
