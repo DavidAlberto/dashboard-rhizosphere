@@ -92,12 +92,12 @@ cd dashboard-rhizosphere
 
 ### 2. Create a Conda Environment
 
-Next, create a Conda environment. The `environment.yml` file contains the necessary dependencies for the project.
+Next, create a Conda environment. The `spec-file.txt` file contains the necessary dependencies for the project.
 
 If you want to create the environment in a specific directory, you can use the `--prefix` option. This is useful for keeping the environment isolated from your base Conda environment.
 
 ```bash
-conda env create -f environment.yml --prefix .rhizosphere
+conda create --prefix .rhizosphere --file spec-file.txt
 ./setup_conda-env.sh # Option 1
 conda activate .rhizosphere
 ```
@@ -105,7 +105,7 @@ conda activate .rhizosphere
 Else, you can create the environment in the default Conda environment directory
 
 ```bash
-conda env create -f environment.yml
+conda create --name rhizosphere --file spec-file.txt
 ./setup_conda-env.sh # Option 2
 conda activate rhizosphere
 ```
